@@ -1,6 +1,7 @@
 package com.example.a900toeic.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,20 +12,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.a900toeic.Activity.PartOneActivity;
 import com.example.a900toeic.Model.Category;
 import com.example.a900toeic.R;
-
-import java.util.List;
 
 public class CategoryAdapter extends ArrayAdapter<Category> {
     private int resource;
     private Context context;
-    public static Category[] objects= {
-            new Category(1,"Part 1", "Choose the right answer", R.drawable.ic_part1),
-            new Category(2,"Part 2", "Choose the right answer", R.drawable.ic_part1),
-            new Category(3,"Part 3", "Choose the right answer", R.drawable.ic_part1),
-            new Category(4,"Part 4", "Choose the right answer", R.drawable.ic_part1)
+    public static Category[] objects = {
+            new Category(1, "Part 1", "Choose the right answer", R.drawable.ic_part1),
+            new Category(2, "Part 2", "Choose the right answer", R.drawable.ic_part1),
+            new Category(3, "Part 3", "Choose the right answer", R.drawable.ic_part1),
+            new Category(4, "Part 4", "Choose the right answer", R.drawable.ic_part1)
     };
+
     public CategoryAdapter(@NonNull Context context, int resource, @NonNull Category[] objects) {
         super(context, resource, objects);
         this.resource = resource;
@@ -34,14 +35,12 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View view= convertView;
-        if(view  == null )
-        {
-            view = LayoutInflater.from(context).inflate(resource,null);
+        View view = convertView;
+        if (view == null) {
+            view = LayoutInflater.from(context).inflate(resource, null);
         }
         Category category = getItem(position);
-        if(category!=null)
-        {
+        if (category != null) {
             TextView txt_cat_name = view.findViewById(R.id.txt_cat_name);
             TextView txt_cat_description = view.findViewById(R.id.txt_cat_description);
             ImageView img_cat_icon = view.findViewById(R.id.img_cat_icon);
@@ -52,7 +51,11 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                switch (category.getId()) {
+                    case 1:
+                        getContext().startActivity(new Intent(getContext(), PartOneActivity.class));
+                        break;
+                }
             }
         });
         return view;

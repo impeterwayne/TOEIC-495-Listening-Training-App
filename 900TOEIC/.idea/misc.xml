@@ -10,6 +10,9 @@
         <entry key="..\:/Android/900TOEIC/app/src/main/res/layout/activity_splash.xml" value="0.1" />
         <entry key="..\:/Android/900TOEIC/app/src/main/res/layout/fragment_practice.xml" value="0.26313405797101447" />
         <entry key="..\:/Android/900TOEIC/app/src/main/res/menu/bottom_main_menu.xml" value="0.27447916666666666" />
+        <entry key="app/src/main/res/layout/activity_part_one.xml" value="0.3697916666666667" />
+        <entry key="app/src/main/res/layout/bottomsheet_audio_training.xml" value="0.3692708333333333" />
+        <entry key="app/src/main/res/layout/fragment_part_one.xml" value="0.3697916666666667" />
         <entry key="app/src/main/res/layout/fragment_practice.xml" value="0.3697916666666667" />
         <entry key="app/src/main/res/layout/item_category.xml" value="0.3697916666666667" />
       </map>

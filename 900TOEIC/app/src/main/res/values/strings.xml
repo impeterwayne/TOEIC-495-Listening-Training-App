@@ -11,6 +11,12 @@
     <string name="test">Real tests</string>
     <string name="review">Review</string>
     <string name="account">Account</string>
+    <string name="training_part_one">Part One Training</string>
+    <string name="part_one_description">Describe the picture</string>
+    <string name="keyA">(A)</string>
+    <string name="keyB">(B)</string>
+    <string name="keyC">(C)</string>
+    <string name="keyD">(D)</string>
 
 
 </resources>

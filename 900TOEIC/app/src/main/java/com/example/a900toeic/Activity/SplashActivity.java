@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.a900toeic.Database.QueryDB;
 import com.example.a900toeic.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -25,6 +26,7 @@ public class SplashActivity extends AppCompatActivity {
                 }
                 if(FirebaseAuth.getInstance().getCurrentUser()!=null)
                 {
+                    QueryDB.loadDataPartOne();
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 }else {
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));

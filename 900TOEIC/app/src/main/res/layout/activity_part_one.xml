@@ -38,18 +38,20 @@
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager_part_one"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/bar"
-        android:layout_above="@id/bottom_audio_bar"/>
+        android:layout_above="@id/bottom_audio_bar"
+        android:layout_below="@id/bar" />
     <LinearLayout
+
         android:id="@+id/bottom_audio_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp"
+        android:padding="12dp"
         android:layout_alignParentBottom="true"
         android:background="@color/primary"
         android:gravity="center_vertical">
@@ -63,22 +65,24 @@
             android:id="@+id/btn_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_play"/>
+            android:src="@drawable/ic_pause"/>
         <ImageView
             android:id="@+id/btn_forward"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_forward"/>
-        <ProgressBar
+        <SeekBar
+            android:id="@+id/seek_bar"
             android:layout_marginHorizontal="12dp"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:secondaryProgressTint="@color/white"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
         <TextView
             android:id="@+id/txt_timeline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1:23"
+            android:text="--:--"
             android:textColor="@color/white"/>
     </LinearLayout>
 </RelativeLayout>

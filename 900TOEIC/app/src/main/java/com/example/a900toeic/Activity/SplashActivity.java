@@ -27,6 +27,7 @@ public class SplashActivity extends AppCompatActivity {
                 if(FirebaseAuth.getInstance().getCurrentUser()!=null)
                 {
                     QueryDB.loadDataPartOne();
+                    QueryDB.loadDataPartTwo();
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 }else {
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));

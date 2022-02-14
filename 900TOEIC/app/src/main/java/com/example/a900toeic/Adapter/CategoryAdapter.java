@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.a900toeic.Activity.PartOneActivity;
+import com.example.a900toeic.Activity.TrainingActivity;
 import com.example.a900toeic.Model.Category;
 import com.example.a900toeic.R;
 
@@ -51,11 +51,22 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getContext(), TrainingActivity.class);
                 switch (category.getId()) {
                     case 1:
-                        getContext().startActivity(new Intent(getContext(), PartOneActivity.class));
+                        intent.putExtra("part",1);
+                        break;
+                    case 2:
+                        intent.putExtra("part",2);
+                        break;
+                    case 3:
+                        intent.putExtra("part",3);
+                        break;
+                    case 4:
+                        intent.putExtra("part",4);
                         break;
                 }
+                getContext().startActivity(intent);
             }
         });
         return view;

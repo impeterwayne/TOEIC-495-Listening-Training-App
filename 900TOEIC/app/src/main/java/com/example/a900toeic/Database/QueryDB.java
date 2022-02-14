@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.example.a900toeic.LocalData.DataLocalManager;
 import com.example.a900toeic.Model.QuestionPartOne;
+import com.example.a900toeic.Model.QuestionPartTwo;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class QueryDB {
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static List<QuestionPartOne> questionPartOneList = new ArrayList<>();
+    public static List<QuestionPartTwo> questionPartTwoList = new ArrayList<>();
     public static void loadDataPartOne()
     {
         questionPartOneList.clear();
@@ -32,7 +34,27 @@ public class QueryDB {
                     QuestionPartOne ques = doc.toObject(QuestionPartOne.class);
                     if(!DataLocalManager.isDone(ques.getId())) questionPartOneList.add(ques);
                 }
-                Log.d("Success retrieve data", String.valueOf(questionPartOneList.size()));
+                Log.d("Success retrieve data1", String.valueOf(questionPartOneList.size()));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Failed to retrieve data", e.toString());
+            }
+        });
+    }
+    public static void loadDataPartTwo()
+    {
+        questionPartTwoList.clear();
+        db.collection("Quiz").document("Questions").collection("Part2").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                {
+                    QuestionPartTwo ques = doc.toObject(QuestionPartTwo.class);
+                    if(!DataLocalManager.isDone(ques.getId())) questionPartTwoList.add(ques);
+                }
+                Log.d("Success retrieve data2", String.valueOf(questionPartTwoList.size()));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

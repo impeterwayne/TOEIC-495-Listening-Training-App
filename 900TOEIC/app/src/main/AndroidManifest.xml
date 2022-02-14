@@ -18,7 +18,7 @@
         android:theme="@style/Theme.900TOEIC"
         tools:targetApi="31">
         <activity
-            android:name=".Activity.PartOneActivity"
+            android:name=".Activity.TrainingActivity"
             android:exported="false" />
 
         <meta-data

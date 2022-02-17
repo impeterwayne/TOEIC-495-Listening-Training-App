@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.a900toeic.Database.QueryDB;
+import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.Fragment.PartOneFragment;
 
 public class ViewPagerPartOneAdapter extends FragmentStateAdapter {
@@ -16,12 +16,12 @@ public class ViewPagerPartOneAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         PartOneFragment fragment = new PartOneFragment();
-        fragment.setData(QueryDB.questionPartOneList.get(position));
+        fragment.setData(DBQuery.questionPartOneList.get(position));
         return fragment;
     }
     @Override
     public int getItemCount() {
-        return QueryDB.questionPartOneList.size();
+        return DBQuery.questionPartOneList.size();
     }
 
 }

@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import com.example.a900toeic.Database.QueryDB;
+import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -128,9 +128,11 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             if(!userExisted(user.getUid()))
                             {
-                                QueryDB.loadDataToNewUser(user.getUid());
+                                DBQuery.loadDataToNewUser(user.getUid());
                             }
-                            QueryDB.loadDataPartOne();
+                            DBQuery.loadDataPartOne();
+                            DBQuery.loadDataPartTwo();
+                            DBQuery.loadDataPartThree();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -170,9 +172,11 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             if(!userExisted(user.getUid()))
                             {
-                                QueryDB.loadDataToNewUser(user.getUid());
+                                DBQuery.loadDataToNewUser(user.getUid());
                             }
-                            QueryDB.loadDataPartOne();
+                            DBQuery.loadDataPartOne();
+                            DBQuery.loadDataPartTwo();
+                            DBQuery.loadDataPartThree();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.

@@ -66,7 +66,7 @@ public class PartTwoFragment extends Fragment {
         txt_script_keyA = view.findViewById(R.id.txt_script_keyA);
         txt_script_keyB = view.findViewById(R.id.txt_script_keyB);
         txt_script_keyC = view.findViewById(R.id.txt_script_keyC);
-        putDataToView();
+        loadDataToView();
     }
     public void processAnswer(String keyAnswerClick, AppCompatButton btn_key)
     {
@@ -85,7 +85,7 @@ public class PartTwoFragment extends Fragment {
         btn_keyB.setClickable(false);
         btn_keyC.setClickable(false);
     }
-    public void putDataToView()
+    public void loadDataToView()
     {
         txt_script_keyA.setText(data.getKeyA());
         txt_script_keyB.setText(data.getKeyB());

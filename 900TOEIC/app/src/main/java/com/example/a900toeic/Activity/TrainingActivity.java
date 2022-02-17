@@ -13,8 +13,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.a900toeic.Adapter.ViewPagerPartOneAdapter;
+import com.example.a900toeic.Adapter.ViewPagerPartThreeAdapter;
 import com.example.a900toeic.Adapter.ViewPagerPartTwoAdapter;
-import com.example.a900toeic.Database.QueryDB;
+import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.Model.Question;
 import com.example.a900toeic.R;
 
@@ -25,8 +26,6 @@ import java.util.List;
 public class TrainingActivity extends AppCompatActivity {
     private ViewPager2 mViewPager;
     private Toolbar toolbar;
-    private ViewPagerPartOneAdapter mViewPagerPartOneAdapter;
-    private ViewPagerPartTwoAdapter mViewPagerPartTwoAdapter;
     private MediaPlayer mediaPlayer;
     private ImageView btn_forward, btn_backward, btn_play;
     private SeekBar seek_bar;
@@ -47,8 +46,6 @@ public class TrainingActivity extends AppCompatActivity {
     private void addControls() {
 
         mViewPager = findViewById(R.id.viewpager_training);
-        mViewPagerPartOneAdapter = new ViewPagerPartOneAdapter(this);
-        mViewPagerPartTwoAdapter = new ViewPagerPartTwoAdapter(this);
         toolbar = findViewById(R.id.toolbar);
         btn_backward= findViewById(R.id.btn_backward);
         btn_forward = findViewById(R.id.btn_forward);
@@ -64,20 +61,29 @@ public class TrainingActivity extends AppCompatActivity {
         switch(partId)
         {
             case 1:
-                for(int i = 0 ; i <QueryDB.questionPartOneList.size(); i++)
+                for(int i = 0; i < DBQuery.questionPartOneList.size(); i++)
                 {
-                    questionList.add(QueryDB.questionPartOneList.get(i));
+                    questionList.add(DBQuery.questionPartOneList.get(i));
                 }
+                ViewPagerPartOneAdapter mViewPagerPartOneAdapter = new ViewPagerPartOneAdapter(this);
                 mViewPager.setAdapter(mViewPagerPartOneAdapter);
                 break;
             case 2:
-                for(int i = 0 ; i <QueryDB.questionPartTwoList.size(); i++)
+                for(int i = 0; i < DBQuery.questionPartTwoList.size(); i++)
                 {
-                    questionList.add(QueryDB.questionPartTwoList.get(i));
+                    questionList.add(DBQuery.questionPartTwoList.get(i));
                 }
+                ViewPagerPartTwoAdapter mViewPagerPartTwoAdapter = new ViewPagerPartTwoAdapter(this);
                 mViewPager.setAdapter(mViewPagerPartTwoAdapter);
                 break;
-
+            case 3:
+                for(int i = 0; i < DBQuery.questionPartThreeList.size(); i++)
+                {
+                    questionList.add(DBQuery.questionPartThreeList.get(i));
+                }
+                ViewPagerPartThreeAdapter mViewPagerPartThreeAdapter = new ViewPagerPartThreeAdapter(this);
+                mViewPager.setAdapter(mViewPagerPartThreeAdapter);
+                break;
 
 
         }
@@ -223,6 +229,6 @@ public class TrainingActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        QueryDB.loadDataPartOne();
+        DBQuery.loadDataPartOne();
     }
 }

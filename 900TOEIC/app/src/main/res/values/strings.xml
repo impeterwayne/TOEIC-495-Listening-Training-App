@@ -17,6 +17,7 @@
     <string name="keyB">(B)</string>
     <string name="keyC">(C)</string>
     <string name="keyD">(D)</string>
+    <string name="show_script">Show Script</string>
 
 
 </resources>

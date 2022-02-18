@@ -5,11 +5,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.Fragment.AccountFragment;
 import com.example.a900toeic.Fragment.PracticeFragment;
 import com.example.a900toeic.Fragment.RealTestFragment;
 import com.example.a900toeic.Fragment.ReviewFragment;
 import com.example.a900toeic.Fragment.StatisticFragment;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainViewPagerAdapter extends FragmentStateAdapter {
     public MainViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {

@@ -18,6 +18,12 @@
     <string name="keyC">(C)</string>
     <string name="keyD">(D)</string>
     <string name="show_script">Show Script</string>
+    <string name="part1">Part One</string>
+    <string name="part2">Part Two</string>
+    <string name="part3">Part Three</string>
+    <string name="part4">Part Four</string>
+    <string name="choose_part_to_review">Choose the part to review</string>
+    <string name="review_saved_question">Review Questions</string>
 
 
 </resources>

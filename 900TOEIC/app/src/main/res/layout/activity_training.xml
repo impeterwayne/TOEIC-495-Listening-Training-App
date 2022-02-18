@@ -23,16 +23,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                     <TextView
-                        android:id="@+id/txt_toolbar_part_one"
+                        android:id="@+id/txt_toolbar_part"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/training_part_one"
                         android:textColor="@color/white"
                         android:textSize="20sp"/>
                     <TextView
+                        android:id="@+id/txt_toolbar_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/txt_toolbar_part_one"
+                        android:layout_below="@id/txt_toolbar_part"
                         android:textColor="@color/white"
                         android:text="@string/part_one_description"/>
                 </RelativeLayout>
@@ -84,6 +85,12 @@
                 android:layout_height="wrap_content"
                 android:text="--:--"
                 android:textColor="@color/white"/>
+            <ImageView
+                android:id="@+id/btn_bookmark"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="12dp"
+                android:src="@drawable/ic_bookmark"/>
         </LinearLayout>
     </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

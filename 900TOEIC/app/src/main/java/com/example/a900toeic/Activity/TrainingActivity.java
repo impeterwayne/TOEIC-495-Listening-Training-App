@@ -3,44 +3,62 @@ package com.example.a900toeic.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.a900toeic.Adapter.CategoryAdapter;
+import com.example.a900toeic.Adapter.ViewPagerPartFourAdapter;
 import com.example.a900toeic.Adapter.ViewPagerPartOneAdapter;
 import com.example.a900toeic.Adapter.ViewPagerPartThreeAdapter;
 import com.example.a900toeic.Adapter.ViewPagerPartTwoAdapter;
 import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.Model.Question;
 import com.example.a900toeic.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TrainingActivity extends AppCompatActivity {
     private ViewPager2 mViewPager;
     private Toolbar toolbar;
+    private TextView txt_toolbar_part, txt_toolbar_description;
     private MediaPlayer mediaPlayer;
-    private ImageView btn_forward, btn_backward, btn_play;
+    private ImageView btn_forward, btn_backward, btn_play, btn_bookmark;
     private SeekBar seek_bar;
     private TextView txt_timeline;
     private Runnable runnable;
     private Handler handler;
     private int partId;
     private List<Question> questionList = new ArrayList<>();
+    private static String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training);
         addControls();
         loadData();
-        playFirstQuestion();
+        playAudioFile(0);
+        handleBookmarkButton(0);
         addEvents();
     }
     private void addControls() {
@@ -50,8 +68,11 @@ public class TrainingActivity extends AppCompatActivity {
         btn_backward= findViewById(R.id.btn_backward);
         btn_forward = findViewById(R.id.btn_forward);
         btn_play = findViewById(R.id.btn_play);
+        btn_bookmark = findViewById(R.id.btn_bookmark);
         seek_bar = findViewById(R.id.seek_bar);
         txt_timeline = findViewById(R.id.txt_timeline);
+        txt_toolbar_part = findViewById(R.id.txt_toolbar_part);
+        txt_toolbar_description = findViewById(R.id.txt_toolbar_description);
         handler = new Handler();
     }
 
@@ -67,6 +88,8 @@ public class TrainingActivity extends AppCompatActivity {
                 }
                 ViewPagerPartOneAdapter mViewPagerPartOneAdapter = new ViewPagerPartOneAdapter(this);
                 mViewPager.setAdapter(mViewPagerPartOneAdapter);
+                txt_toolbar_part.setText("Part One Training");
+                txt_toolbar_description.setText(CategoryAdapter.categories[0].getDescription());
                 break;
             case 2:
                 for(int i = 0; i < DBQuery.questionPartTwoList.size(); i++)
@@ -75,6 +98,8 @@ public class TrainingActivity extends AppCompatActivity {
                 }
                 ViewPagerPartTwoAdapter mViewPagerPartTwoAdapter = new ViewPagerPartTwoAdapter(this);
                 mViewPager.setAdapter(mViewPagerPartTwoAdapter);
+                txt_toolbar_part.setText("Part Two Training");
+                txt_toolbar_description.setText(CategoryAdapter.categories[1].getDescription());
                 break;
             case 3:
                 for(int i = 0; i < DBQuery.questionPartThreeList.size(); i++)
@@ -83,9 +108,21 @@ public class TrainingActivity extends AppCompatActivity {
                 }
                 ViewPagerPartThreeAdapter mViewPagerPartThreeAdapter = new ViewPagerPartThreeAdapter(this);
                 mViewPager.setAdapter(mViewPagerPartThreeAdapter);
+                txt_toolbar_part.setText("Part Three Training");
+                txt_toolbar_description.setText(CategoryAdapter.categories[2].getDescription());
                 break;
-
-
+            case 4:
+                for(int i = 0; i < DBQuery.questionPartFourList.size(); i++)
+                {
+                    questionList.add(DBQuery.questionPartFourList.get(i));
+                }
+                ViewPagerPartFourAdapter mViewPagerPartFourAdapter = new ViewPagerPartFourAdapter(this);
+                mViewPager.setAdapter(mViewPagerPartFourAdapter);
+                txt_toolbar_part.setText("Part Four Training");
+                txt_toolbar_description.setText(CategoryAdapter.categories[3].getDescription());
+                break;
+            case 11:
+                break;
         }
     }
 
@@ -151,44 +188,85 @@ public class TrainingActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                btn_play.setImageResource(R.drawable.ic_pause);
-                if(mediaPlayer!=null)
-                {
-                    mediaPlayer.stop();
-                    mediaPlayer.release();
-                    mediaPlayer = null;
-                }
-                mediaPlayer = new MediaPlayer();
-                try {
-                    mediaPlayer.setDataSource(questionList.get(position).getAudio_url());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mediaPlayer) {
-                        seek_bar.setMax(mediaPlayer.getDuration());
-                        txt_timeline.setText(getTimeString(mediaPlayer.getDuration()));
-                        mediaPlayer.start();
-                        updateSeekBar();
-                    }
-                });
-                mediaPlayer.prepareAsync();
+                playAudioFile(position);
+                handleBookmarkButton(position);
+
             }
         });
+
     }
-    private void playFirstQuestion() {
+
+    private void handleBookmarkButton(int position) {
+            String part = "Part"+ partId;
+                DBQuery.db.collection("User").document(user_id).collection(part)
+                        .whereEqualTo("id", questionList.get(position).getId()).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful())
+                                {
+                                    if(task.getResult().size()>0)
+                                    {
+                                        btn_bookmark.setImageResource(R.drawable.ic_bookmarked);
+                                        btn_bookmark.setTag("bookmarked");
+                                    }else {
+                                        btn_bookmark.setImageResource(R.drawable.ic_bookmark);
+                                        btn_bookmark.setTag("bookmark");
+                                    }
+                                }
+                            }
+                        });
+                btn_bookmark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(btn_bookmark.getTag().equals("bookmarked"))
+                {
+                    btn_bookmark.setImageResource(R.drawable.ic_bookmark);
+                    btn_bookmark.setTag("bookmark");
+                    DBQuery.db.collection("User").document(user_id).collection(part)
+                            .document(questionList.get(position).getId()).
+                            delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.d("Delete successfully", questionList.get(position).getId());
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("Delete data", e.toString());
+                        }
+                    });
+                }else {
+                    btn_bookmark.setImageResource(R.drawable.ic_bookmarked);
+                    btn_bookmark.setTag("bookmarked");
+                    Map<String, String> value = new HashMap<>();
+                    value.put("id",questionList.get(position).getId());
+                    DBQuery.db.collection("User").document(user_id).collection(part)
+                            .document(questionList.get(position).getId()).set(value);
+                }
+            }
+        });
+        }
+
+    private void playAudioFile(int position) {
+        btn_play.setImageResource(R.drawable.ic_pause);
+        if(mediaPlayer!=null)
+        {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
         mediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(questionList.get(0).getAudio_url());
+            mediaPlayer.setDataSource(questionList.get(position).getAudio_url());
         } catch (IOException e) {
             e.printStackTrace();
         }
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-                txt_timeline.setText(getTimeString(mediaPlayer.getDuration()));
                 seek_bar.setMax(mediaPlayer.getDuration());
+                txt_timeline.setText(getTimeString(mediaPlayer.getDuration()));
                 mediaPlayer.start();
                 updateSeekBar();
             }
@@ -229,6 +307,13 @@ public class TrainingActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        refreshData();
+    }
+
+    private void refreshData() {
         DBQuery.loadDataPartOne();
+        DBQuery.loadDataPartTwo();
+        DBQuery.loadDataPartThree();
+        DBQuery.loadDataPartFour();
     }
 }

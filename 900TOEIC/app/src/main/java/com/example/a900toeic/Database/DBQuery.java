@@ -3,15 +3,22 @@ package com.example.a900toeic.Database;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.a900toeic.LocalData.DataLocalManager;
 import com.example.a900toeic.Model.QuestionPartOne;
 import com.example.a900toeic.Model.QuestionPartThreeAndFour;
 import com.example.a900toeic.Model.QuestionPartTwo;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -26,6 +33,8 @@ public class DBQuery {
     public static List<QuestionPartTwo> questionPartTwoList = new ArrayList<>();
     public static List<QuestionPartThreeAndFour> questionPartThreeList = new ArrayList<>();
     public static List<QuestionPartThreeAndFour> questionPartFourList = new ArrayList<>();
+    public static long user_goal;
+    public static long user_highest_score;
     public static void loadDataPartOne()
     {
         questionPartOneList.clear();
@@ -116,5 +125,16 @@ public class DBQuery {
         basic_information.put("max_score", 0);
         ref.set(basic_information);
         
+    }
+    public static void loadUserGoal(String uid)
+    {
+        db.collection("User").document(uid)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                        user_goal = value.getLong("goal");
+                        user_highest_score = value.getLong("max_score");
+                    }
+                });
     }
 }

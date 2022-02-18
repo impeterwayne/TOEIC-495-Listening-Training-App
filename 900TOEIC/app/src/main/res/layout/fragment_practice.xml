@@ -62,6 +62,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/txt_goal_score"
             android:layout_width="60dp"
             android:textColor="@color/black"
             android:layout_height="wrap_content"
@@ -95,6 +96,7 @@
             android:layout_marginStart="12dp"/>
 
         <TextView
+            android:id="@+id/txt_highest_score"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="200"

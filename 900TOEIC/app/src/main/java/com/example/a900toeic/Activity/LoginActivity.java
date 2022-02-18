@@ -130,9 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                             {
                                 DBQuery.loadDataToNewUser(user.getUid());
                             }
-                            DBQuery.loadDataPartOne();
-                            DBQuery.loadDataPartTwo();
-                            DBQuery.loadDataPartThree();
+                            loadAllData();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -174,9 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                             {
                                 DBQuery.loadDataToNewUser(user.getUid());
                             }
-                            DBQuery.loadDataPartOne();
-                            DBQuery.loadDataPartTwo();
-                            DBQuery.loadDataPartThree();
+                            loadAllData();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -187,6 +183,15 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void loadAllData() {
+        DBQuery.loadDataPartOne();
+        DBQuery.loadDataPartTwo();
+        DBQuery.loadDataPartThree();
+        DBQuery.loadDataPartFour();
+        DBQuery.loadUserGoal(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        Log.d("GOAL",String.valueOf(DBQuery.user_goal));
     }
 
     private boolean userExisted(String uid) {

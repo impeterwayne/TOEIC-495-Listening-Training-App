@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,10 +26,10 @@
                 android:id="@+id/txt_cat_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/txt_cat_name"
                 android:text="choose the right answer"
-                android:textStyle="italic"
                 android:textSize="15sp"
-                android:layout_below="@id/txt_cat_name"/>
+                android:textStyle="italic|bold" />
             <ImageView
                 android:id="@+id/img_cat_icon"
                 android:layout_width="40dp"

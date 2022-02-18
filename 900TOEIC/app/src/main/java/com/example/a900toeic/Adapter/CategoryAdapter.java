@@ -19,11 +19,11 @@ import com.example.a900toeic.R;
 public class CategoryAdapter extends ArrayAdapter<Category> {
     private int resource;
     private Context context;
-    public static Category[] objects = {
-            new Category(1, "Part 1", "Choose the right answer", R.drawable.ic_part1),
-            new Category(2, "Part 2", "Choose the right answer", R.drawable.ic_part1),
-            new Category(3, "Part 3", "Choose the right answer", R.drawable.ic_part1),
-            new Category(4, "Part 4", "Choose the right answer", R.drawable.ic_part1)
+    public static Category[] categories = {
+            new Category(1, "Part 1", "Describe the picture", R.drawable.ic_part1),
+            new Category(2, "Part 2", "Respond to a question", R.drawable.ic_part2),
+            new Category(3, "Part 3", "Understand the dialogue", R.drawable.ic_part3),
+            new Category(4, "Part 4", "Understand the short talk", R.drawable.ic_part4)
     };
 
     public CategoryAdapter(@NonNull Context context, int resource, @NonNull Category[] objects) {

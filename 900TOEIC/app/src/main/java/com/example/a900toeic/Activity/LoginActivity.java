@@ -191,7 +191,8 @@ public class LoginActivity extends AppCompatActivity {
         DBQuery.loadDataPartThree();
         DBQuery.loadDataPartFour();
         DBQuery.loadUserGoal(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        Log.d("GOAL",String.valueOf(DBQuery.user_goal));
+        DBQuery.loadUserId();
+
     }
 
     private boolean userExisted(String uid) {

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.arch.core.internal.SafeIterableMap;
 
 import com.example.a900toeic.LocalData.DataLocalManager;
 import com.example.a900toeic.Model.QuestionPartOne;
@@ -14,6 +15,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -30,11 +32,18 @@ import java.util.Map;
 public class DBQuery {
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static List<QuestionPartOne> questionPartOneList = new ArrayList<>();
+
     public static List<QuestionPartTwo> questionPartTwoList = new ArrayList<>();
     public static List<QuestionPartThreeAndFour> questionPartThreeList = new ArrayList<>();
     public static List<QuestionPartThreeAndFour> questionPartFourList = new ArrayList<>();
+    public static String user_id = "";
     public static long user_goal;
     public static long user_highest_score;
+    public static List<QuestionPartOne> questionPartOneReviewList = new ArrayList<>();
+    public static List<QuestionPartTwo> questionPartTwoReviewList = new ArrayList<>();
+    public static List<QuestionPartThreeAndFour> questionPartThreeReviewList = new ArrayList<>();
+    public static List<QuestionPartThreeAndFour> questionPartFourReviewList = new ArrayList<>();
+
     public static void loadDataPartOne()
     {
         questionPartOneList.clear();
@@ -115,7 +124,105 @@ public class DBQuery {
             }
         });
     }
+    public static void loadDataReviewPartOne(String uid)
+    {
 
+        questionPartOneReviewList.clear();
+        CollectionReference ref = db.collection("Quiz").document("Questions").collection("Part1");
+        db.collection("User").document(uid).collection("Part1").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                {
+                    String questionId = doc.get("id",String.class);
+                    ref.whereEqualTo("id",questionId).limit(1).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                            {
+                                QuestionPartOne ques = doc.toObject(QuestionPartOne.class);
+                                questionPartOneReviewList.add(ques);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+    public static void loadDataReviewPartTwo(String uid)
+    {
+
+        questionPartTwoReviewList.clear();
+        CollectionReference ref = db.collection("Quiz").document("Questions").collection("Part2");
+        db.collection("User").document(uid).collection("Part2").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                {
+                    String questionId = doc.get("id",String.class);
+                    ref.whereEqualTo("id",questionId).limit(1).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                            {
+                                QuestionPartTwo ques = doc.toObject(QuestionPartTwo.class);
+                                questionPartTwoReviewList.add(ques);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+    public static void loadDataReviewPartThree(String uid)
+    {
+
+        questionPartThreeReviewList.clear();
+        CollectionReference ref = db.collection("Quiz").document("Questions").collection("Part3");
+        db.collection("User").document(uid).collection("Part3").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                {
+                    String questionId = doc.get("id",String.class);
+                    ref.whereEqualTo("id",questionId).limit(1).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                            {
+                                QuestionPartThreeAndFour ques = doc.toObject(QuestionPartThreeAndFour.class);
+                                questionPartThreeReviewList.add(ques);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+    public static void loadDataReviewPartFour(String uid)
+    {
+        questionPartFourReviewList.clear();
+        CollectionReference ref = db.collection("Quiz").document("Questions").collection("Part4");
+        db.collection("User").document(uid).collection("Part4").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                {
+                    String questionId = doc.get("id",String.class);
+                    ref.whereEqualTo("id",questionId).limit(1).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                            {
+                                QuestionPartThreeAndFour ques = doc.toObject(QuestionPartThreeAndFour.class);
+                                questionPartFourReviewList.add(ques);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
     public static void loadDataToNewUser(String uid)
     {
         DocumentReference ref = db.collection("User").document(uid);
@@ -125,6 +232,10 @@ public class DBQuery {
         basic_information.put("max_score", 0);
         ref.set(basic_information);
         
+    }
+    public static void loadUserId()
+    {
+        user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
     public static void loadUserGoal(String uid)
     {

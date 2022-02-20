@@ -43,5 +43,6 @@ public class SplashActivity extends AppCompatActivity {
         DBQuery.loadDataPartThree();
         DBQuery.loadDataPartFour();
         DBQuery.loadUserGoal(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        DBQuery.loadUserId();
     }
 }

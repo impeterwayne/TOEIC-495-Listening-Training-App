@@ -19,12 +19,14 @@
         <entry key="app/src/main/res/layout/bottomsheet_audio_training.xml" value="0.3692708333333333" />
         <entry key="app/src/main/res/layout/bottomsheet_script.xml" value="0.3697916666666667" />
         <entry key="app/src/main/res/layout/fragment_account.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_empty_review.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_part_four.xml" value="0.3697916666666667" />
         <entry key="app/src/main/res/layout/fragment_part_one.xml" value="0.3697916666666667" />
         <entry key="app/src/main/res/layout/fragment_part_three.xml" value="0.3729166666666667" />
         <entry key="app/src/main/res/layout/fragment_part_two.xml" value="0.3697916666666667" />
         <entry key="app/src/main/res/layout/fragment_practice.xml" value="0.3697916666666667" />
         <entry key="app/src/main/res/layout/fragment_review.xml" value="0.3697916666666667" />
+        <entry key="app/src/main/res/layout/fragment_statistic.xml" value="0.3697916666666667" />
         <entry key="app/src/main/res/layout/item_category.xml" value="0.3697916666666667" />
         <entry key="app/src/main/res/layout/layout_content_training.xml" value="0.3697916666666667" />
       </map>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.a900toeic.Database.DBQuery;
+import com.example.a900toeic.LocalData.StatisticDataEntry;
 import com.example.a900toeic.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -44,5 +45,6 @@ public class SplashActivity extends AppCompatActivity {
         DBQuery.loadDataPartFour();
         DBQuery.loadUserGoal(FirebaseAuth.getInstance().getCurrentUser().getUid());
         DBQuery.loadUserId();
+        DBQuery.loadDataStatistic();
     }
 }

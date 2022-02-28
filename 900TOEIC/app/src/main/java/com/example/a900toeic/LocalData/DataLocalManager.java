@@ -7,7 +7,7 @@ import java.util.Set;
 public class DataLocalManager {
     private static final String PREF_IS_FIRST_INSTALL = "PREF_IS_FIRST_INSTALL";
     private static DataLocalManager instance;
-    private MySharedPreferences mySharedPreferences;
+    private static MySharedPreferences mySharedPreferences;
     public static void init(Context context)
     {
         instance = new DataLocalManager();
@@ -34,6 +34,18 @@ public class DataLocalManager {
     {
         boolean res =  DataLocalManager.getInstance().mySharedPreferences.getBooleanValue(question_id);
         return res;
+    }
+    public static void addKeyClick(long number, String keyClick)
+    {
+        DataLocalManager.getInstance().mySharedPreferences.putStringValue(String.valueOf(number),keyClick);
+    }
+    public static String getKeyClick(long number)
+    {
+        return DataLocalManager.getInstance().mySharedPreferences.getStringValue(number+"");
+    }
+    public static void clearKeyClick()
+    {
+        DataLocalManager.getInstance().mySharedPreferences.clearKey();
     }
 
 }

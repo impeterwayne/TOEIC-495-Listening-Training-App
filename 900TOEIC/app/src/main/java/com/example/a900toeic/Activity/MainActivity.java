@@ -4,13 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.a900toeic.Adapter.MainViewPagerAdapter;
+import com.example.a900toeic.Broadcast.UpdateStatistic;
+import com.example.a900toeic.LocalData.StatisticDataEntry;
 import com.example.a900toeic.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager2 viewPager;
@@ -20,8 +28,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        updateStatisticValues();
         addControls();
         addEvents();
+    }
+
+    private void updateStatisticValues() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH),
+                    0,0,0);
+        setShedule(calendar.getTimeInMillis());
+    }
+
+    private void setShedule(long timeInMillis) {
+        AlarmManager schedule = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, UpdateStatistic.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        schedule.setRepeating(AlarmManager.RTC, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     private void addEvents() {

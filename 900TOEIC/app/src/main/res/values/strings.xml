@@ -25,6 +25,8 @@
     <string name="choose_part_to_review">Choose the part to review</string>
     <string name="review_saved_question">Review Questions</string>
     <string name="no_question">There is no question to review</string>
+    <string name="real_test">Taking Real Tests</string>
+    <string name="submit">SUBMIT</string>
 
 
 </resources>

@@ -6,10 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.arch.core.internal.SafeIterableMap;
 
+import com.anychart.chart.common.dataentry.DataEntry;
 import com.example.a900toeic.LocalData.DataLocalManager;
+import com.example.a900toeic.LocalData.StatisticDataEntry;
 import com.example.a900toeic.Model.QuestionPartOne;
 import com.example.a900toeic.Model.QuestionPartThreeAndFour;
 import com.example.a900toeic.Model.QuestionPartTwo;
+import com.example.a900toeic.Model.RealTest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,7 +35,6 @@ import java.util.Map;
 public class DBQuery {
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static List<QuestionPartOne> questionPartOneList = new ArrayList<>();
-
     public static List<QuestionPartTwo> questionPartTwoList = new ArrayList<>();
     public static List<QuestionPartThreeAndFour> questionPartThreeList = new ArrayList<>();
     public static List<QuestionPartThreeAndFour> questionPartFourList = new ArrayList<>();
@@ -43,7 +45,7 @@ public class DBQuery {
     public static List<QuestionPartTwo> questionPartTwoReviewList = new ArrayList<>();
     public static List<QuestionPartThreeAndFour> questionPartThreeReviewList = new ArrayList<>();
     public static List<QuestionPartThreeAndFour> questionPartFourReviewList = new ArrayList<>();
-
+    public static List<DataEntry> seriesDataStatistic = new ArrayList<>();
     public static void loadDataPartOne()
     {
         questionPartOneList.clear();
@@ -174,9 +176,9 @@ public class DBQuery {
             }
         });
     }
+
     public static void loadDataReviewPartThree(String uid)
     {
-
         questionPartThreeReviewList.clear();
         CollectionReference ref = db.collection("Quiz").document("Questions").collection("Part3");
         db.collection("User").document(uid).collection("Part3").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -199,6 +201,7 @@ public class DBQuery {
             }
         });
     }
+
     public static void loadDataReviewPartFour(String uid)
     {
         questionPartFourReviewList.clear();
@@ -248,4 +251,26 @@ public class DBQuery {
                     }
                 });
     }
+    public static void loadDataStatistic()
+    {
+        seriesDataStatistic.clear();
+        CollectionReference ref = DBQuery.db.collection("User").document(DBQuery.user_id)
+                .collection("Statistic");
+        ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot doc : queryDocumentSnapshots)
+                {
+                    long num_part1=0, num_part2=0, num_part3=0, num_part4=0;
+                    num_part1 =(long ) doc.get("num_part1");
+                    num_part2 =(long ) doc.get("num_part2");
+                    num_part3 =(long ) doc.get("num_part3");
+                    num_part4 =(long ) doc.get("num_part4");
+                    Log.d(doc.getId(), num_part1 + " " + num_part2 + " " + num_part3 +" " + num_part4);
+                    seriesDataStatistic.add(new StatisticDataEntry(doc.getId().substring(0,5),num_part1,num_part2,num_part3,num_part4));
+                }
+            }
+        });
+    }
+
 }

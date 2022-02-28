@@ -1,9 +1,12 @@
 package com.example.a900toeic.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.anychart.AnyChart;
 import com.anychart.AnyChartView;
@@ -17,6 +20,8 @@ import com.anychart.enums.Anchor;
 import com.anychart.enums.MarkerType;
 import com.anychart.enums.TooltipPositionMode;
 import com.anychart.graphics.vector.Stroke;
+import com.example.a900toeic.Database.DBQuery;
+import com.example.a900toeic.LocalData.StatisticDataEntry;
 import com.example.a900toeic.R;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,22 +55,11 @@ public class StatisticFragment extends Fragment {
                 .yStroke((Stroke) null, null, null, (String) null, (String) null);
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
-
         cartesian.title("Training Progress Chart");
-
         cartesian.yAxis(0).title("Number of practiced questions");
         cartesian.xAxis(0).labels().padding(5d, 5d, 5d, 5d);
-        List<DataEntry> seriesData = new ArrayList<>();
-        seriesData.add(new CustomDataEntry("20/02",2,4,0,1));
-        seriesData.add(new CustomDataEntry("21/02",3,2,1,2));
-        seriesData.add(new CustomDataEntry("22/02",5,4,2,1));
-        seriesData.add(new CustomDataEntry("23/02",1,8,3,4));
-        seriesData.add(new CustomDataEntry("24/02",0,6,4,5));
-        seriesData.add(new CustomDataEntry("25/02",5,5,5,7));
-        seriesData.add(new CustomDataEntry("26/02",9,1,5,9));
-        seriesData.add(new CustomDataEntry("27/02",12,9,8,1));
         Set set = Set.instantiate();
-        set.data(seriesData);
+        set.data(DBQuery.seriesDataStatistic);
         Mapping series1Mapping = set.mapAs("{ x: 'x', value: 'value' }");
         Mapping series2Mapping = set.mapAs("{ x: 'x', value: 'value2' }");
         Mapping series3Mapping = set.mapAs("{ x: 'x', value: 'value3' }");
@@ -120,15 +114,5 @@ public class StatisticFragment extends Fragment {
         cartesian.legend().fontSize(13d);
         cartesian.legend().padding(0d, 0d, 10d, 0d);
         anyChartView.setChart(cartesian);
-    }
-    private class CustomDataEntry extends ValueDataEntry {
-
-        CustomDataEntry(String x, Number part1, Number part2, Number part3, Number part4) {
-            super(x, part1);
-            setValue("value2", part2);
-            setValue("value3", part3);
-            setValue("value4", part4);
-        }
-
     }
 }

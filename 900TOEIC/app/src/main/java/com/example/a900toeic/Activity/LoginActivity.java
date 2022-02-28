@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.a900toeic.Database.DBQuery;
+import com.example.a900toeic.LocalData.StatisticDataEntry;
 import com.example.a900toeic.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -192,7 +193,6 @@ public class LoginActivity extends AppCompatActivity {
         DBQuery.loadDataPartFour();
         DBQuery.loadUserGoal(FirebaseAuth.getInstance().getCurrentUser().getUid());
         DBQuery.loadUserId();
-
     }
 
     private boolean userExisted(String uid) {

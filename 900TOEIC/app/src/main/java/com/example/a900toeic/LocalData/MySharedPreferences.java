@@ -10,6 +10,7 @@ import java.util.Set;
 
 public class MySharedPreferences {
     public static String MY_SHARED_PREFERENCES = "MY_SHARED_PREFERENCES";
+    public static String TEST_PREF = "TEST_PREF";
     private Context mContext;
 
     public MySharedPreferences(Context mContext) {
@@ -27,26 +28,19 @@ public class MySharedPreferences {
         return sharedPreferences.getBoolean(key, false);
     }
     public void putStringValue(String key, String value) {
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(TEST_PREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
         editor.apply();
     }
 
     public String getStringValue(String key) {
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(TEST_PREF, MODE_PRIVATE);
         return sharedPreferences.getString(key, "");
     }
-
-    public void putStringSetValue(String key, Set<String> value) {
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putStringSet(key, value);
-        editor.apply();
-    }
-
-    public Set<String> getStringSetValue(String key){
-        SharedPreferences sharedPreferences = mContext.getSharedPreferences(MY_SHARED_PREFERENCES, MODE_PRIVATE);
-        return sharedPreferences.getStringSet(key, new HashSet<>());
+    public void clearKey()
+    {
+        SharedPreferences sharedPreferences = mContext.getSharedPreferences(TEST_PREF, MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
     }
 }

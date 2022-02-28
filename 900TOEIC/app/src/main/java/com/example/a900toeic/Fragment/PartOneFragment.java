@@ -23,7 +23,6 @@ public class PartOneFragment extends Fragment {
     private TextView txt_script_keyA,txt_script_keyB,txt_script_keyC,txt_script_keyD;
     private QuestionPartOne data;
     private String keyAnswerClick;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

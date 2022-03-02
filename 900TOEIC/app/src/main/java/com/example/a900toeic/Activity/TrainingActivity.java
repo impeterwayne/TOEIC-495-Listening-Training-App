@@ -166,7 +166,6 @@ public class TrainingActivity extends AppCompatActivity {
 
     private void addEvents() {
 
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,13 +184,13 @@ public class TrainingActivity extends AppCompatActivity {
             btn_forward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    mediaPlayer.seekTo(mediaPlayer.getCurrentPosition()+3000);
                 }
             });
             btn_backward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    mediaPlayer.seekTo(mediaPlayer.getCurrentPosition()-3000);
                 }
             });
             btn_play.setOnClickListener(new View.OnClickListener() {
@@ -319,11 +318,22 @@ public class TrainingActivity extends AppCompatActivity {
     public void updateSeekBar() {
         try {
             int currPos = mediaPlayer.getCurrentPosition();
-
             seek_bar.setProgress(currPos);
             runnable = new Runnable() {
                 @Override
                 public void run() {
+                    try {
+                        if(mediaPlayer.isPlaying())
+                        {
+                            btn_play.setImageResource(R.drawable.ic_pause);
+                        }else {
+                            btn_play.setImageResource(R.drawable.ic_play);
+                        }
+                    }catch (IllegalStateException ex)
+                    {
+
+                    }
+
                     updateSeekBar();
                 }
             };
@@ -346,6 +356,11 @@ public class TrainingActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        if(mediaPlayer!=null)
+        {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
         refreshData();
     }
     private void refreshData() {

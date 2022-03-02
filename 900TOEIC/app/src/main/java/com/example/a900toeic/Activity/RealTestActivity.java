@@ -86,6 +86,7 @@ public class RealTestActivity extends AppCompatActivity {
                 }
                 partOneAdapter = new RealTestPartOneAdapter(RealTestActivity.this,partOneQuestionList);
                 rcv_test_part1.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
+                rcv_test_part1.setHasFixedSize(true);
                 rcv_test_part1.setAdapter(partOneAdapter);
             }
         });
@@ -101,6 +102,7 @@ public class RealTestActivity extends AppCompatActivity {
                 }
                 partTwoAdapter = new RealTestPartTwoAdapter(RealTestActivity.this,partTwoQuestionList);
                 rcv_test_part2.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
+                rcv_test_part2.setHasFixedSize(true);
                 rcv_test_part2.setAdapter(partTwoAdapter);
             }
         });
@@ -118,6 +120,7 @@ public class RealTestActivity extends AppCompatActivity {
                 }
                 partThreeAdapter = new RealTestPartThreeAndFourAdapter(RealTestActivity.this,partThreeQuestionList);
                 rcv_test_part3.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
+                rcv_test_part3.setHasFixedSize(true);
                 rcv_test_part3.setAdapter(partThreeAdapter);
             }
         });
@@ -136,6 +139,7 @@ public class RealTestActivity extends AppCompatActivity {
                 callback.onCallBack(keyMap);
                 partFourAdapter = new RealTestPartThreeAndFourAdapter(RealTestActivity.this,partFourQuestionList);
                 rcv_test_part4.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
+                rcv_test_part4.setHasFixedSize(true);
                 rcv_test_part4.setAdapter(partFourAdapter);
             }
         });

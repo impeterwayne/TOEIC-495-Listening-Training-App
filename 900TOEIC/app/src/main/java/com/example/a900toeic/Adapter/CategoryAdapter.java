@@ -20,10 +20,10 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
     private int resource;
     private Context context;
     public static Category[] categories = {
-            new Category(1, "Part 1", "Describe the picture", R.drawable.ic_part1),
-            new Category(2, "Part 2", "Respond to a question", R.drawable.ic_part2),
-            new Category(3, "Part 3", "Understand the dialogue", R.drawable.ic_part3),
-            new Category(4, "Part 4", "Understand the short talk", R.drawable.ic_part4)
+            new Category(1, "Part 1", "Photographs", R.drawable.ic_part1),
+            new Category(2, "Part 2", "Question - Response", R.drawable.ic_part2),
+            new Category(3, "Part 3", "Short conversation", R.drawable.ic_part3),
+            new Category(4, "Part 4", "Talks", R.drawable.ic_part4)
     };
 
     public CategoryAdapter(@NonNull Context context, int resource, @NonNull Category[] objects) {

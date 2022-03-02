@@ -21,7 +21,8 @@
                 android:textStyle="italic|bold"
                 android:textSize="18sp"
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:textColor="@color/text_key"
+                android:layout_height="150dp">
             </TextView>
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_keyA"
@@ -43,6 +44,7 @@
                 android:textSize="18sp"
                 android:layout_marginVertical="12dp"
                 android:layout_marginHorizontal="32dp"
+                android:textColor="@color/text_key"
                 android:text="(A)"
                 android:visibility="gone"/>
             <androidx.appcompat.widget.AppCompatButton
@@ -65,6 +67,7 @@
                 android:textSize="18sp"
                 android:layout_marginVertical="12dp"
                 android:layout_marginHorizontal="32dp"
+                android:textColor="@color/text_key"
                 android:text="(A)"
                 android:visibility="gone"/>
             <androidx.appcompat.widget.AppCompatButton
@@ -87,6 +90,7 @@
                 android:textSize="18sp"
                 android:layout_marginVertical="12dp"
                 android:layout_marginHorizontal="32dp"
+                android:textColor="@color/text_key"
                 android:text="(A)"
                 android:visibility="gone"/>
         </LinearLayout>

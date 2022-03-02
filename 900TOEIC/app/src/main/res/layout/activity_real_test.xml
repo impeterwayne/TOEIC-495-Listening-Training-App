@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#EFEFEF"
     tools:context=".Activity.RealTestActivity">
 
 
@@ -22,6 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
+                android:textColor="@color/black"
                 android:text="@string/part1"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -29,7 +31,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_test_part1"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"/>
 
             <TextView
@@ -37,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:text="@string/part2"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
             <androidx.recyclerview.widget.RecyclerView
@@ -48,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:text="@string/part3"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
             <androidx.recyclerview.widget.RecyclerView
@@ -59,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:text="@string/part4"
+                android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
             <androidx.recyclerview.widget.RecyclerView

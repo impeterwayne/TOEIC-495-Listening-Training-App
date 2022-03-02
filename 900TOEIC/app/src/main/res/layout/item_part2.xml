@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="12dp"
-    android:elevation="5dp"
+    android:elevation="10dp"
+    android:backgroundTint="@color/white"
     android:layout_marginTop="12dp"
     android:layout_marginHorizontal="12dp">
     <LinearLayout
@@ -32,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt_question_number"
                 android:text="(A)"
+                android:textColor="@color/text_key"
                 android:textStyle="bold"
                 android:textSize="15sp"/>
 
@@ -41,6 +43,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="(B)"
+                android:textColor="@color/text_key"
                 android:textSize="15sp"
                 android:textStyle="bold" />
             <RadioButton
@@ -49,6 +52,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="(C)"
+                android:textColor="@color/text_key"
                 android:textSize="15sp"
                 android:textStyle="bold" />
         </LinearLayout>

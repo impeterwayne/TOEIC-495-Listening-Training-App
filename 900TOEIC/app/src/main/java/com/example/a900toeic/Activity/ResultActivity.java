@@ -1,16 +1,13 @@
 package com.example.a900toeic.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
-import com.example.a900toeic.Database.DBQuery;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.a900toeic.LocalData.DataLocalManager;
 import com.example.a900toeic.R;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class ResultActivity extends AppCompatActivity {

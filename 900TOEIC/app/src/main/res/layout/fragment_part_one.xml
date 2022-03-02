@@ -37,6 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="italic|bold"
+                android:textColor="@color/text_key"
                 android:textSize="18sp"
                 android:layout_marginVertical="12dp"
                 android:layout_marginHorizontal="32dp"
@@ -59,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="italic|bold"
+                android:textColor="@color/text_key"
                 android:textSize="18sp"
                 android:layout_marginVertical="12dp"
                 android:layout_marginHorizontal="32dp"
@@ -84,6 +86,7 @@
                 android:textSize="18sp"
                 android:layout_marginVertical="12dp"
                 android:layout_marginHorizontal="32dp"
+                android:textColor="@color/text_key"
                 android:text="(A)"
                 android:visibility="gone"/>
             <androidx.appcompat.widget.AppCompatButton
@@ -107,6 +110,7 @@
                 android:layout_marginVertical="12dp"
                 android:layout_marginHorizontal="32dp"
                 android:text="(A)"
+                android:textColor="@color/text_key"
                 android:visibility="gone"/>
         </LinearLayout>
 

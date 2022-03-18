@@ -37,8 +37,14 @@ public class PracticeFragment extends Fragment {
     private void addEvents(View view) {
         Glide.with(this).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).centerCrop().into(img_avatar);
         txt_fullName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-        txt_goal_score.setText(String.valueOf(DBQuery.user_goal));
-        txt_highest_score.setText(String.valueOf(DBQuery.user_highest_score));
+        DBQuery.loadUserGoal(FirebaseAuth.getInstance().getCurrentUser().getUid(), new DBQuery.iUserGoalCallback() {
+            @Override
+            public void onCallBack(long user_goal, long highest_score) {
+                txt_goal_score.setText(String.valueOf(user_goal));
+                txt_highest_score.setText(String.valueOf(highest_score));
+            }
+        });
+
     }
 
     private void addControls(View view) {

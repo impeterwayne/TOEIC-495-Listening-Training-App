@@ -1,13 +1,20 @@
 package com.example.a900toeic.Adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a900toeic.Activity.RealTestActivity;
@@ -55,9 +62,41 @@ public class RealTestAdapter extends RecyclerView.Adapter<RealTestAdapter.ViewHo
         @Override
         public void onClick(View view) {
             //TODO: add a dialog here
-            Intent intent = new Intent(context, RealTestActivity.class);
-            intent.putExtra("testName", testList.get(getAdapterPosition()).getName());
-            context.startActivity(intent);
+            openConfirmDialog();
+        }
+        private void openConfirmDialog() {
+            final Dialog dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_confirm_realtest);
+            Window window = dialog.getWindow();
+            if (window==null)
+            {
+                return;
+            }
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            WindowManager.LayoutParams windowAttrs = window.getAttributes();
+            windowAttrs.gravity = Gravity.CENTER;
+            window.setAttributes(windowAttrs);
+            AppCompatButton btn_accept = dialog.findViewById(R.id.btn_accept);
+            AppCompatButton btn_cancel = dialog.findViewById(R.id.btn_cancel);
+            btn_accept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(context, RealTestActivity.class);
+                    intent.putExtra("testName", testList.get(getAdapterPosition()).getName());
+                    context.startActivity(intent);
+
+                }
+            });
+            btn_cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
         }
     }
 }

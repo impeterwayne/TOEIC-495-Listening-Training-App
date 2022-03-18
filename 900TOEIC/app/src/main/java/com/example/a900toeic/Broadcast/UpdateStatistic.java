@@ -7,6 +7,7 @@ import android.content.Intent;
 import androidx.annotation.Nullable;
 
 import com.example.a900toeic.Database.DBQuery;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -24,7 +25,8 @@ public class UpdateStatistic extends BroadcastReceiver {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         String localDate = sdf.format(date);
         //TODO: check if firebase contains the same date
-        DocumentReference ref = DBQuery.db.collection("User").document(DBQuery.user_id)
+        String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference ref = DBQuery.db.collection("User").document(user_id)
                 .collection("Statistic").document(localDate);
         ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override

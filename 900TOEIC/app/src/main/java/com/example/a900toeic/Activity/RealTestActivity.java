@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,9 +15,9 @@ import com.example.a900toeic.Adapter.RealTestPartThreeAndFourAdapter;
 import com.example.a900toeic.Adapter.RealTestPartTwoAdapter;
 import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.LocalData.DataLocalManager;
-import com.example.a900toeic.Model.RealTestPartOneQuestion;
-import com.example.a900toeic.Model.RealTestPartThreeAndFourQuestion;
-import com.example.a900toeic.Model.RealTestPartTwoQuestion;
+import com.example.a900toeic.Model.QuestionPartOne;
+import com.example.a900toeic.Model.QuestionPartThreeAndFour;
+import com.example.a900toeic.Model.QuestionPartTwo;
 import com.example.a900toeic.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,10 +38,10 @@ public class RealTestActivity extends AppCompatActivity {
     private RealTestPartTwoAdapter partTwoAdapter;
     private RealTestPartThreeAndFourAdapter partThreeAdapter;
     private RealTestPartThreeAndFourAdapter partFourAdapter;
-    private List<RealTestPartOneQuestion> partOneQuestionList;
-    private List<RealTestPartTwoQuestion> partTwoQuestionList;
-    private List<RealTestPartThreeAndFourQuestion> partThreeQuestionList;
-    private List<RealTestPartThreeAndFourQuestion> partFourQuestionList;
+    private List<QuestionPartOne> partOneQuestionList;
+    private List<QuestionPartTwo> partTwoQuestionList;
+    private List<QuestionPartThreeAndFour> partThreeQuestionList;
+    private List<QuestionPartThreeAndFour> partFourQuestionList;
     private Map<Long, String> keyMap;
     private TextView btn_submit;
     @Override
@@ -53,6 +52,7 @@ public class RealTestActivity extends AppCompatActivity {
         loadQuestions(new iMyCallback() {
             @Override
             public void onCallBack(Map<Long, String> map) {
+                Log.d("keymapcallbacksize", map.size()+"");
                 Intent intent = new Intent(RealTestActivity.this, ResultActivity.class);
                 intent.putExtra("keyMap", (Serializable) map);
                 btn_submit.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +68,7 @@ public class RealTestActivity extends AppCompatActivity {
 
     private void loadQuestions(iMyCallback callback) {
         String testName = getIntent().getStringExtra("testName").trim();
-        Log.d("testname", testName);
+
         partOneQuestionList = new ArrayList<>();
         partTwoQuestionList = new ArrayList<>();
         partThreeQuestionList = new ArrayList<>();
@@ -80,7 +80,7 @@ public class RealTestActivity extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(DocumentSnapshot doc : queryDocumentSnapshots)
                 {
-                    RealTestPartOneQuestion ques = doc.toObject(RealTestPartOneQuestion.class);
+                    QuestionPartOne ques = doc.toObject(QuestionPartOne.class);
                     keyMap.put(ques.getNumber(), ques.getKey());
                     partOneQuestionList.add(ques);
                 }
@@ -96,7 +96,7 @@ public class RealTestActivity extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(DocumentSnapshot doc : queryDocumentSnapshots)
                 {
-                    RealTestPartTwoQuestion ques = doc.toObject(RealTestPartTwoQuestion.class);
+                    QuestionPartTwo ques = doc.toObject(QuestionPartTwo.class);
                     keyMap.put(ques.getNumber(), ques.getKey());
                     partTwoQuestionList.add(ques);
                 }
@@ -112,7 +112,7 @@ public class RealTestActivity extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(DocumentSnapshot doc : queryDocumentSnapshots)
                 {
-                    RealTestPartThreeAndFourQuestion ques = doc.toObject(RealTestPartThreeAndFourQuestion.class);
+                    QuestionPartThreeAndFour ques = doc.toObject(QuestionPartThreeAndFour.class);
                     keyMap.put(ques.getNumber1(), ques.getKey1());
                     keyMap.put(ques.getNumber2(), ques.getKey2());
                     keyMap.put(ques.getNumber3(), ques.getKey3());
@@ -130,19 +130,22 @@ public class RealTestActivity extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(DocumentSnapshot doc : queryDocumentSnapshots)
                 {
-                    RealTestPartThreeAndFourQuestion ques = doc.toObject(RealTestPartThreeAndFourQuestion.class);
+                    QuestionPartThreeAndFour ques = doc.toObject(QuestionPartThreeAndFour.class);
                     keyMap.put(ques.getNumber1(), ques.getKey1());
                     keyMap.put(ques.getNumber2(), ques.getKey2());
                     keyMap.put(ques.getNumber3(), ques.getKey3());
                     partFourQuestionList.add(ques);
                 }
-                callback.onCallBack(keyMap);
                 partFourAdapter = new RealTestPartThreeAndFourAdapter(RealTestActivity.this,partFourQuestionList);
                 rcv_test_part4.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
                 rcv_test_part4.setHasFixedSize(true);
                 rcv_test_part4.setAdapter(partFourAdapter);
+                Log.d("keymapsize", keyMap.size()+"");
+                callback.onCallBack(keyMap);
             }
         });
+
+
     }
 
     private void addControls() {
@@ -159,6 +162,6 @@ public class RealTestActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        DataLocalManager.clearKeyClick();
+        DataLocalManager.clearAnswers();
     }
 }

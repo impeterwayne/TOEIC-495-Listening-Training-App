@@ -6,9 +6,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activity.TrainingActivity"
     android:background="#EFEFEF">
+
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/bar"
             android:layout_width="match_parent"
@@ -19,23 +22,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:navigationIcon="@drawable/ic_back">
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
                     <TextView
                         android:id="@+id/txt_toolbar_part"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/training_part_one"
                         android:textColor="@color/white"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
+
                     <TextView
                         android:id="@+id/txt_toolbar_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/txt_toolbar_part"
-                        android:textColor="@color/white"
-                        android:text="@string/part_one_description"/>
+                        android:text="@string/part_one_description"
+                        android:textColor="@color/white" />
                 </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
@@ -56,13 +62,14 @@
             android:background="@color/primary"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="12dp">
+            android:padding="12dp"
+            tools:visibility="visible">
 
-                <ImageView
+            <ImageView
                 android:id="@+id/btn_backward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_backward" />
+                android:src="@drawable/ic_backward_white" />
 
             <ImageView
                 android:id="@+id/btn_play"
@@ -75,15 +82,15 @@
                 android:id="@+id/btn_forward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_forward"/>
+                android:src="@drawable/ic_forward_white" />
 
             <SeekBar
                 android:id="@+id/seek_bar"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="12dp"
+                android:layout_weight="1"
                 android:secondaryProgressTint="@color/white" />
 
             <TextView
@@ -98,7 +105,15 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginLeft="12dp"
-                android:src="@drawable/ic_bookmark" />
+                android:src="@drawable/ic_bookmark_white" />
         </LinearLayout>
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@+id/relativeLayout"
+        app:layout_anchorGravity="center" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

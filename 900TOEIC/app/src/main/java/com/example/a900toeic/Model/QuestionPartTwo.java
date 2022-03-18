@@ -1,39 +1,59 @@
 package com.example.a900toeic.Model;
 
 public class QuestionPartTwo extends Question{
-    private String keyA, keyB,keyC;
-
+    private String key;
+    private String script_keyA, script_keyB,script_keyC;
+    private String script;
+    private long number;
     public QuestionPartTwo() {
+        super();
     }
 
-    public QuestionPartTwo(String id, String audio_url, String key, String script, String keyA, String keyB, String keyC) {
-        super(id, audio_url, key, script);
-        this.keyA = keyA;
-        this.keyB = keyB;
-        this.keyC = keyC;
+    public String getScript_keyA() {
+        return script_keyA;
     }
 
-    public String getKeyA() {
-        return keyA;
+    public void setScript_keyA(String script_keyA) {
+        this.script_keyA = script_keyA;
     }
 
-    public void setKeyA(String keyA) {
-        this.keyA = keyA;
+    public String getScript_keyB() {
+        return script_keyB;
     }
 
-    public String getKeyB() {
-        return keyB;
+    public void setScript_keyB(String script_keyB) {
+        this.script_keyB = script_keyB;
     }
 
-    public void setKeyB(String keyB) {
-        this.keyB = keyB;
+    public String getScript_keyC() {
+        return script_keyC;
     }
 
-    public String getKeyC() {
-        return keyC;
+    public void setScript_keyC(String script_keyC) {
+        this.script_keyC = script_keyC;
     }
 
-    public void setKeyC(String keyC) {
-        this.keyC = keyC;
+    public String getScript() {
+        return script;
+    }
+
+    public void setScript(String script) {
+        this.script = script;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public long getNumber() {
+        return number;
+    }
+
+    public void setNumber(long number) {
+        this.number = number;
     }
 }

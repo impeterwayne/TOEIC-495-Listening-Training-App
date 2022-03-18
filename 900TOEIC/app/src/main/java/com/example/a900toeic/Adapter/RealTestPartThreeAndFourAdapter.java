@@ -1,7 +1,6 @@
 package com.example.a900toeic.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +10,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.a900toeic.Activity.ResultActivity;
 import com.example.a900toeic.LocalData.DataLocalManager;
-import com.example.a900toeic.Model.RealTestPartThreeAndFourQuestion;
+import com.example.a900toeic.Model.Answer;
+import com.example.a900toeic.Model.QuestionPartThreeAndFour;
 import com.example.a900toeic.R;
 
 import java.util.List;
 
 public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTestPartThreeAndFourAdapter.ViewHolder>{
     private Context context;
-    private List<RealTestPartThreeAndFourQuestion> questionList;
+    private List<QuestionPartThreeAndFour> questionList;
 
-    public RealTestPartThreeAndFourAdapter(Context context, List<RealTestPartThreeAndFourQuestion> questionList) {
+    public RealTestPartThreeAndFourAdapter(Context context, List<QuestionPartThreeAndFour> questionList) {
         this.context = context;
         this.questionList = questionList;
     }
@@ -36,33 +35,37 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTe
 
     @Override
     public void onBindViewHolder(@NonNull RealTestPartThreeAndFourAdapter.ViewHolder holder, int position) {
-        RealTestPartThreeAndFourQuestion question = questionList.get(position);
+        QuestionPartThreeAndFour question = questionList.get(position);
         holder.txt_question_number1.setText("Question No. " + question.getNumber1());
         holder.txt_question1.setText(question.getQuestion1());
         holder.txt_question_number2.setText("Question No. " + question.getNumber2());
         holder.txt_question2.setText(question.getQuestion2());
         holder.txt_question_number3.setText("Question No. " + question.getNumber3());
         holder.txt_question3.setText(question.getQuestion3());
-        holder.rb_part34_key1A.setText(question.getKey1A());
-        holder.rb_part34_key1B.setText(question.getKey1B());
-        holder.rb_part34_key1C.setText(question.getKey1C());
-        holder.rb_part34_key1D.setText(question.getKey1D());
-        holder.rb_part34_key2A.setText(question.getKey2A());
-        holder.rb_part34_key2B.setText(question.getKey2B());
-        holder.rb_part34_key2C.setText(question.getKey2C());
-        holder.rb_part34_key2D.setText(question.getKey2D());
-        holder.rb_part34_key3A.setText(question.getKey3A());
-        holder.rb_part34_key3B.setText(question.getKey3B());
-        holder.rb_part34_key3C.setText(question.getKey3C());
-        holder.rb_part34_key3D.setText(question.getKey3D());
+        holder.rb_part34_key1A.setText(question.getScript_key1A());
+        holder.rb_part34_key1B.setText(question.getScript_key1B());
+        holder.rb_part34_key1C.setText(question.getScript_key1C());
+        holder.rb_part34_key1D.setText(question.getScript_key1D());
+        holder.rb_part34_key2A.setText(question.getScript_key2A());
+        holder.rb_part34_key2B.setText(question.getScript_key2B());
+        holder.rb_part34_key2C.setText(question.getScript_key2C());
+        holder.rb_part34_key2D.setText(question.getScript_key2D());
+        holder.rb_part34_key3A.setText(question.getScript_key3A());
+        holder.rb_part34_key3B.setText(question.getScript_key3B());
+        holder.rb_part34_key3C.setText(question.getScript_key3C());
+        holder.rb_part34_key3D.setText(question.getScript_key3D());
         long number1 = questionList.get(position).getNumber1();
         long number2 = questionList.get(position).getNumber2();
         long number3 = questionList.get(position).getNumber3();
-        Intent intent = new Intent(context, ResultActivity.class);
+        Answer answer1 = new Answer(number1, question.getKey1(), "");
+        Answer answer2 = new Answer(number2, question.getKey2(), "");
+        Answer answer3 = new Answer(number3, question.getKey3(), "");
+
         holder.rb_part34_key1A.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataLocalManager.addKeyClick(number1, "A");
+                answer1.setKeyClick("A");
+                DataLocalManager.addAnswer(answer1);
                 holder.rb_part34_key1B.setChecked(false);
                 holder.rb_part34_key1C.setChecked(false);
                 holder.rb_part34_key1D.setChecked(false);
@@ -71,7 +74,8 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTe
         holder.rb_part34_key1B.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataLocalManager.addKeyClick(number1, "B");
+                answer1.setKeyClick("B");
+                DataLocalManager.addAnswer(answer1);
                 holder.rb_part34_key1A.setChecked(false);
                 holder.rb_part34_key1C.setChecked(false);
                 holder.rb_part34_key1D.setChecked(false);
@@ -80,7 +84,8 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTe
         holder.rb_part34_key1C.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataLocalManager.addKeyClick(number1, "C");
+                answer1.setKeyClick("C");
+                DataLocalManager.addAnswer(answer1);
                 holder.rb_part34_key1A.setChecked(false);
                 holder.rb_part34_key1B.setChecked(false);
                 holder.rb_part34_key1D.setChecked(false);
@@ -89,7 +94,8 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTe
         holder.rb_part34_key1D.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataLocalManager.addKeyClick(number1, "D");
+                answer1.setKeyClick("D");
+                DataLocalManager.addAnswer(answer1);
                 holder.rb_part34_key1A.setChecked(false);
                 holder.rb_part34_key1B.setChecked(false);
                 holder.rb_part34_key1C.setChecked(false);
@@ -98,7 +104,8 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTe
         holder.rb_part34_key2A.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataLocalManager.addKeyClick(number2, "A");
+                answer2.setKeyClick("A");
+                DataLocalManager.addAnswer(answer2);
                 holder.rb_part34_key2B.setChecked(false);
                 holder.rb_part34_key2C.setChecked(false);
                 holder.rb_part34_key2D.setChecked(false);
@@ -107,7 +114,8 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTe
         holder.rb_part34_key2B.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataLocalManager.addKeyClick(number2, "B");
+                answer2.setKeyClick("B");
+                DataLocalManager.addAnswer(answer2);
                 holder.rb_part34_key2A.setChecked(false);
                 holder.rb_part34_key2C.setChecked(false);
                 holder.rb_part34_key2D.setChecked(false);
@@ -116,7 +124,8 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTe
         holder.rb_part34_key2C.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataLocalManager.addKeyClick(number2, "C");
+                answer2.setKeyClick("C");
+                DataLocalManager.addAnswer(answer2);
                 holder.rb_part34_key2A.setChecked(false);
                 holder.rb_part34_key2B.setChecked(false);
                 holder.rb_part34_key2D.setChecked(false);
@@ -125,7 +134,8 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTe
         holder.rb_part34_key2D.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataLocalManager.addKeyClick(number2, "D");
+                answer2.setKeyClick("D");
+                DataLocalManager.addAnswer(answer2);
                 holder.rb_part34_key2A.setChecked(false);
                 holder.rb_part34_key2B.setChecked(false);
                 holder.rb_part34_key2C.setChecked(false);
@@ -134,7 +144,8 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTe
         holder.rb_part34_key3A.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataLocalManager.addKeyClick(number3, "A");
+                answer3.setKeyClick("A");
+                DataLocalManager.addAnswer(answer3);
                 holder.rb_part34_key3B.setChecked(false);
                 holder.rb_part34_key3C.setChecked(false);
                 holder.rb_part34_key3D.setChecked(false);
@@ -143,7 +154,8 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTe
         holder.rb_part34_key3B.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataLocalManager.addKeyClick(number3, "B");
+                answer3.setKeyClick("B");
+                DataLocalManager.addAnswer(answer3);
                 holder.rb_part34_key3A.setChecked(false);
                 holder.rb_part34_key3C.setChecked(false);
                 holder.rb_part34_key3D.setChecked(false);
@@ -152,7 +164,8 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTe
         holder.rb_part34_key3C.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataLocalManager.addKeyClick(number3, "C");
+                answer3.setKeyClick("C");
+                DataLocalManager.addAnswer(answer3);
                 holder.rb_part34_key3A.setChecked(false);
                 holder.rb_part34_key3B.setChecked(false);
                 holder.rb_part34_key3D.setChecked(false);
@@ -161,7 +174,8 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<RealTe
         holder.rb_part34_key3D.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DataLocalManager.addKeyClick(number3, "D");
+                answer3.setKeyClick("D");
+                DataLocalManager.addAnswer(answer3);
                 holder.rb_part34_key3A.setChecked(false);
                 holder.rb_part34_key3B.setChecked(false);
                 holder.rb_part34_key3C.setChecked(false);

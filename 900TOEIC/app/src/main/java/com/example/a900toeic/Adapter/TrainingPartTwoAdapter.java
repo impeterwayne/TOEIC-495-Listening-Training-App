@@ -4,13 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-
-import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.Fragment.PartTwoFragment;
+import com.example.a900toeic.Model.Question;
+import com.example.a900toeic.Model.QuestionPartTwo;
+import java.util.List;
 
 public class TrainingPartTwoAdapter extends FragmentStateAdapter {
-    public TrainingPartTwoAdapter(@NonNull FragmentActivity fragmentActivity) {
+    private List<QuestionPartTwo> data;
+    public TrainingPartTwoAdapter(@NonNull FragmentActivity fragmentActivity, List<QuestionPartTwo> data) {
         super(fragmentActivity);
+        this.data = data;
     }
 
     @NonNull
@@ -18,12 +21,12 @@ public class TrainingPartTwoAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
 
         PartTwoFragment fragment = new PartTwoFragment();
-        fragment.setData(DBQuery.questionPartTwoList.get(position));
+        fragment.setData( data.get(position));
         return fragment;
     }
 
     @Override
     public int getItemCount() {
-        return DBQuery.questionPartTwoList.size();
+        return data.size();
     }
 }

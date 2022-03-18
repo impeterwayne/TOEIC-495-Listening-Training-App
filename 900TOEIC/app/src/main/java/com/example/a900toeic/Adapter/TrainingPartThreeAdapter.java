@@ -7,22 +7,28 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.Fragment.PartThreeFragment;
+import com.example.a900toeic.Model.Question;
+import com.example.a900toeic.Model.QuestionPartThreeAndFour;
+
+import java.util.List;
 
 public class TrainingPartThreeAdapter extends FragmentStateAdapter {
-    public TrainingPartThreeAdapter(@NonNull FragmentActivity fragmentActivity) {
+    List<QuestionPartThreeAndFour> data;
+    public TrainingPartThreeAdapter(@NonNull FragmentActivity fragmentActivity, List<QuestionPartThreeAndFour> data) {
         super(fragmentActivity);
+        this.data = data;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
         PartThreeFragment fragment = new PartThreeFragment();
-        fragment.setData(DBQuery.questionPartThreeList.get(position));
+        fragment.setData( data.get(position));
         return fragment;
     }
 
     @Override
     public int getItemCount() {
-        return DBQuery.questionPartThreeList.size();
+        return data.size();
     }
 }

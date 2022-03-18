@@ -1,5 +1,6 @@
 package com.example.a900toeic.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -67,6 +68,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
                         break;
                 }
                 getContext().startActivity(intent);
+                ((Activity) getContext()).finish();
             }
         });
         return view;

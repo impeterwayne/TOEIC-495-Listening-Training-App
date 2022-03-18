@@ -21,7 +21,7 @@
                 android:src="@color/black">
             </ImageView>
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_keyA"
+                android:id="@+id/btn_key1A"
                 android:layout_marginTop="32dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 android:text="(A)"
                 android:visibility="gone"/>
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_keyB"
+                android:id="@+id/btn_key1B"
                 android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:text="(A)"
                 android:visibility="gone"/>
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_keyC"
+                android:id="@+id/btn_key1C"
                 android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,7 +90,7 @@
                 android:text="(A)"
                 android:visibility="gone"/>
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_keyD"
+                android:id="@+id/btn_key1D"
                 android:layout_marginTop="12dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

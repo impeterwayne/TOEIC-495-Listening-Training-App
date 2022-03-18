@@ -38,7 +38,7 @@ public class MySharedPreferences {
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(TEST_PREF, MODE_PRIVATE);
         return sharedPreferences.getString(key, "");
     }
-    public void clearKey()
+    public void clearTestAnswers()
     {
         SharedPreferences sharedPreferences = mContext.getSharedPreferences(TEST_PREF, MODE_PRIVATE);
         sharedPreferences.edit().clear().apply();

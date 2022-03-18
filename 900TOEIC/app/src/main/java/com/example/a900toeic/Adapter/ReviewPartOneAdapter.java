@@ -6,27 +6,27 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.a900toeic.Database.DBQuery;
-import com.example.a900toeic.Fragment.EmptyReviewFragment;
 import com.example.a900toeic.Fragment.PartOneFragment;
+import com.example.a900toeic.Model.Question;
+import com.example.a900toeic.Model.QuestionPartOne;
+
+import java.util.List;
 
 public class ReviewPartOneAdapter extends FragmentStateAdapter {
-    public ReviewPartOneAdapter(@NonNull FragmentActivity fragmentActivity) {
+    private List<QuestionPartOne> data;
+    public ReviewPartOneAdapter(@NonNull FragmentActivity fragmentActivity, List<QuestionPartOne> data) {
         super(fragmentActivity);
+        this.data = data;
     }
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-//        if(DBQuery.questionPartOneReviewList.size() == 0) {
-//            EmptyReviewFragment fragment = new EmptyReviewFragment();
-//            return fragment;
-//        }
         PartOneFragment fragment = new PartOneFragment();
-        fragment.setData(DBQuery.questionPartOneReviewList.get(position));
+        fragment.setData(data.get(position));
         return fragment;
     }
     @Override
     public int getItemCount() {
-//        if(DBQuery.questionPartOneReviewList.size()==0) return 1;
-        return DBQuery.questionPartOneReviewList.size();
+        return data.size();
     }
 }

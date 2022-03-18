@@ -4,10 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.example.a900toeic.Database.DBQuery;
-import com.example.a900toeic.LocalData.StatisticDataEntry;
 import com.example.a900toeic.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -28,7 +26,6 @@ public class SplashActivity extends AppCompatActivity {
                 }
                 if(FirebaseAuth.getInstance().getCurrentUser()!=null)
                 {
-                    loadAllData();
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 }else {
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
@@ -38,13 +35,4 @@ public class SplashActivity extends AppCompatActivity {
         }.start();
     }
 
-    private void loadAllData() {
-        DBQuery.loadDataPartOne();
-        DBQuery.loadDataPartTwo();
-        DBQuery.loadDataPartThree();
-        DBQuery.loadDataPartFour();
-        DBQuery.loadUserGoal(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        DBQuery.loadUserId();
-        DBQuery.loadDataStatistic();
-    }
 }

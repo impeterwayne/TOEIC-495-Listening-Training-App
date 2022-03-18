@@ -1,7 +1,6 @@
 package com.example.a900toeic.Fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
+import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.LocalData.DataLocalManager;
 import com.example.a900toeic.Model.QuestionPartThreeAndFour;
 import com.example.a900toeic.R;
@@ -22,7 +22,7 @@ public class PartFourFragment extends Fragment {
             btn_key2A,btn_key2B,btn_key2C,btn_key2D,
             btn_key3A,btn_key3B,btn_key3C,btn_key3D;
     private AppCompatButton btn_show_script;
-    private TextView txt_script1, txt_script2, txt_script3;
+    private TextView txt_question1, txt_script2, txt_script3;
     private String keyClick , key2click, key3click;
     private QuestionPartThreeAndFour data;
     private int countAnsweredQuestions = 0 ;
@@ -145,9 +145,10 @@ public class PartFourFragment extends Fragment {
 
     public void processAnswer(String keyClick, AppCompatButton btn_click, int questionNum)
     {
+
         if(questionNum==1)
         {
-            if(keyClick.equals(data.getKey()))
+            if(keyClick.equals(data.getKey1()))
                 btn_click.setBackgroundResource(R.drawable.bg_right_answer);
             else
                 btn_click.setBackgroundResource(R.drawable.bg_wrong_answer);
@@ -181,14 +182,15 @@ public class PartFourFragment extends Fragment {
         }
         if(countAnsweredQuestions==3)
         {
-            // DataLocalManager.addDoneQuestion(data.getId());
+            DataLocalManager.addDoneQuestion(data.getId());
+            DBQuery.updateStatisticValues(4);
         }
     }
     private void addControls(View view) {
-        btn_keyA = view.findViewById(R.id.btn_keyA);
-        btn_keyB = view.findViewById(R.id.btn_keyB);
-        btn_keyC = view.findViewById(R.id.btn_keyC);
-        btn_keyD = view.findViewById(R.id.btn_keyD);
+        btn_keyA = view.findViewById(R.id.btn_key1A);
+        btn_keyB = view.findViewById(R.id.btn_key1B);
+        btn_keyC = view.findViewById(R.id.btn_key1C);
+        btn_keyD = view.findViewById(R.id.btn_key1D);
         btn_key2A = view.findViewById(R.id.btn_key2A);
         btn_key2B = view.findViewById(R.id.btn_key2B);
         btn_key2C = view.findViewById(R.id.btn_key2C);
@@ -197,29 +199,34 @@ public class PartFourFragment extends Fragment {
         btn_key3B = view.findViewById(R.id.btn_key3B);
         btn_key3C = view.findViewById(R.id.btn_key3C);
         btn_key3D = view.findViewById(R.id.btn_key3D);
-        txt_script1 = view.findViewById(R.id.txt_script1);
-        txt_script2 = view.findViewById(R.id.txt_script2);
-        txt_script3 = view.findViewById(R.id.txt_script3);
+        txt_question1 = view.findViewById(R.id.txt_question1);
+        txt_script2 = view.findViewById(R.id.txt_question2);
+        txt_script3 = view.findViewById(R.id.txt_question3);
         btn_show_script = view.findViewById(R.id.btn_show_script);
         loadDataToView();
     }
     public void loadDataToView()
     {
-        txt_script1.setText(data.getScript1());
-        btn_keyA.setText(data.getKeyA());
-        btn_keyB.setText(data.getKeyB());
-        btn_keyC.setText(data.getKeyC());
-        btn_keyD.setText(data.getKeyD());
-        txt_script2.setText(data.getScript2());
-        btn_key2A.setText(data.getKey2A());
-        btn_key2B.setText(data.getKey2B());
-        btn_key2C.setText(data.getKey2C());
-        btn_key2D.setText(data.getKey2D());
-        txt_script3.setText(data.getScript3());
-        btn_key3A.setText(data.getKey3A());
-        btn_key3B.setText(data.getKey3B());
-        btn_key3C.setText(data.getKey3C());
-        btn_key3D.setText(data.getKey3D());
+
+        txt_question1.setText(data.getQuestion1());
+        btn_keyA.setText(data.getScript_key1A());
+        btn_keyB.setText(data.getScript_key1B());
+        btn_keyC.setText(data.getScript_key1C());
+        btn_keyD.setText(data.getScript_key1D());
+
+
+        txt_script2.setText(data.getQuestion2());
+        btn_key2A.setText(data.getScript_key2A());
+        btn_key2B.setText(data.getScript_key2B());
+        btn_key2C.setText(data.getScript_key2C());
+        btn_key2D.setText(data.getScript_key2D());
+
+
+        txt_script3.setText(data.getQuestion3());
+        btn_key3A.setText(data.getScript_key3A());
+        btn_key3B.setText(data.getScript_key3B());
+        btn_key3C.setText(data.getScript_key3C());
+        btn_key3D.setText(data.getScript_key3D());
     }
     public void setData(QuestionPartThreeAndFour data)
     {

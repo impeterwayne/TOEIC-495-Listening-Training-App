@@ -13,7 +13,6 @@ import android.view.MenuItem;
 
 import com.example.a900toeic.Adapter.MainViewPagerAdapter;
 import com.example.a900toeic.Broadcast.UpdateStatistic;
-import com.example.a900toeic.LocalData.StatisticDataEntry;
 import com.example.a900toeic.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;

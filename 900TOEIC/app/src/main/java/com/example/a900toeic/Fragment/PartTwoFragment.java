@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
+import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.LocalData.DataLocalManager;
-import com.example.a900toeic.Model.QuestionPartOne;
 import com.example.a900toeic.Model.QuestionPartTwo;
 import com.example.a900toeic.R;
 
@@ -19,7 +19,6 @@ public class PartTwoFragment extends Fragment {
     private AppCompatButton btn_keyA, btn_keyB, btn_keyC;
     private TextView txt_script_part_two, txt_script_keyA, txt_script_keyB,txt_script_keyC;
     private QuestionPartTwo data;
-    private String keyAnswerClick;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,47 +34,51 @@ public class PartTwoFragment extends Fragment {
         btn_keyA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                keyAnswerClick ="A";
-                processAnswer(keyAnswerClick,btn_keyA);
+                processAnswer(btn_keyA);
                 DataLocalManager.addDoneQuestion(data.getId());
             }
         });
         btn_keyB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                keyAnswerClick ="B";
-                processAnswer(keyAnswerClick,btn_keyB);
+                processAnswer(btn_keyB);
                 DataLocalManager.addDoneQuestion(data.getId());
             }
         });
         btn_keyC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                keyAnswerClick ="C";
-                processAnswer(keyAnswerClick,btn_keyC);
+                processAnswer(btn_keyC);
                 DataLocalManager.addDoneQuestion(data.getId());
             }
         });
     }
 
     private void addControls(View view) {
-        btn_keyA = view.findViewById(R.id.btn_keyA);
-        btn_keyB = view.findViewById(R.id.btn_keyB);
-        btn_keyC = view.findViewById(R.id.btn_keyC);
+        btn_keyA = view.findViewById(R.id.btn_key1A);
+        btn_keyA.setTag("A");
+        btn_keyB = view.findViewById(R.id.btn_key1B);
+        btn_keyA.setTag("B");
+        btn_keyC = view.findViewById(R.id.btn_key1C);
+        btn_keyA.setTag("C");
         txt_script_part_two = view.findViewById(R.id.txt_script_part_two);
         txt_script_keyA = view.findViewById(R.id.txt_script_keyA);
         txt_script_keyB = view.findViewById(R.id.txt_script_keyB);
         txt_script_keyC = view.findViewById(R.id.txt_script_keyC);
         loadDataToView();
     }
-    public void processAnswer(String keyAnswerClick, AppCompatButton btn_key)
+    public void processAnswer(AppCompatButton btnKeyClick)
     {
-        if(keyAnswerClick.equals(data.getKey()))
+        DBQuery.updateStatisticValues(2);
+        if(btnKeyClick.getTag().equals(data.getKey()))
         {
-            btn_key.setBackgroundResource(R.drawable.bg_right_answer);
+            btnKeyClick.setBackgroundResource(R.drawable.bg_right_answer);
         }else
         {
-            btn_key.setBackgroundResource(R.drawable.bg_wrong_answer);
+            btnKeyClick.setBackgroundResource(R.drawable.bg_wrong_answer);
+            if(btn_keyA.getTag().equals(data.getKey())) btn_keyA.setBackgroundResource(R.drawable.bg_right_answer);
+            if(btn_keyB.getTag().equals(data.getKey())) btn_keyB.setBackgroundResource(R.drawable.bg_right_answer);
+            if(btn_keyC.getTag().equals(data.getKey())) btn_keyC.setBackgroundResource(R.drawable.bg_right_answer);
         }
         txt_script_part_two.setText(data.getScript());
         txt_script_keyA.setVisibility(View.VISIBLE);
@@ -87,9 +90,9 @@ public class PartTwoFragment extends Fragment {
     }
     public void loadDataToView()
     {
-        txt_script_keyA.setText(data.getKeyA());
-        txt_script_keyB.setText(data.getKeyB());
-        txt_script_keyC.setText(data.getKeyC());
+        txt_script_keyA.setText(data.getScript_keyA());
+        txt_script_keyB.setText(data.getScript_keyB());
+        txt_script_keyC.setText(data.getScript_keyC());
     }
     public void setData(QuestionPartTwo data) {
         this.data = data;

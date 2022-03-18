@@ -2,32 +2,26 @@ package com.example.a900toeic.Database;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.arch.core.internal.SafeIterableMap;
-
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.example.a900toeic.LocalData.DataLocalManager;
-import com.example.a900toeic.LocalData.StatisticDataEntry;
+import com.example.a900toeic.Model.DataStatistic;
+import com.example.a900toeic.Model.Question;
 import com.example.a900toeic.Model.QuestionPartOne;
 import com.example.a900toeic.Model.QuestionPartThreeAndFour;
 import com.example.a900toeic.Model.QuestionPartTwo;
-import com.example.a900toeic.Model.RealTest;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,239 +32,260 @@ public class DBQuery {
     public static List<QuestionPartTwo> questionPartTwoList = new ArrayList<>();
     public static List<QuestionPartThreeAndFour> questionPartThreeList = new ArrayList<>();
     public static List<QuestionPartThreeAndFour> questionPartFourList = new ArrayList<>();
-    public static String user_id = "";
-    public static long user_goal;
-    public static long user_highest_score;
     public static List<QuestionPartOne> questionPartOneReviewList = new ArrayList<>();
     public static List<QuestionPartTwo> questionPartTwoReviewList = new ArrayList<>();
     public static List<QuestionPartThreeAndFour> questionPartThreeReviewList = new ArrayList<>();
     public static List<QuestionPartThreeAndFour> questionPartFourReviewList = new ArrayList<>();
-    public static List<DataEntry> seriesDataStatistic = new ArrayList<>();
-    public static void loadDataPartOne()
-    {
-        questionPartOneList.clear();
-        db.collection("Quiz").document("Questions").collection("Part1").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+    public static ArrayList<DataStatistic> dataStatisticArr = new ArrayList<>();
+
+    public static void loadTestNameList(iTestNameCallback callback) {
+        ArrayList<String> listTest = new ArrayList<>();
+        db.collection("Tests").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
-                {
-                    QuestionPartOne ques = doc.toObject(QuestionPartOne.class);
-                    if(!DataLocalManager.isDone(ques.getId())) questionPartOneList.add(ques);
+                for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                    listTest.add(doc.get("name", String.class));
                 }
-                Log.d("Success retrieve data1", String.valueOf(questionPartOneList.size()));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("Failed to retrieve data", e.toString());
+                callback.onCallBack(listTest);
+                Log.d("ListTestsize", listTest.size()+"");
             }
         });
     }
-    public static void loadDataPartTwo()
-    {
+    public static void loadDataPartOne(List<String> listTest, iTrainingCallback<QuestionPartOne> dataCallback) {
+                questionPartOneList.clear();
+                for(String test : listTest)
+                {
+                    db.collection("Tests").document(test).collection("Part1").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(DocumentSnapshot doc: queryDocumentSnapshots)
+                            {
+                                questionPartOneList.add(doc.toObject(QuestionPartOne.class));
+                            }
+                            dataCallback.onCallBack(questionPartOneList);
+                        }
+                    });
+                }
+
+            }
+
+
+    public static void loadDataPartTwo(List<String> listTest,iTrainingCallback<QuestionPartTwo> callback) {
         questionPartTwoList.clear();
-        db.collection("Quiz").document("Questions").collection("Part2").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        db.collection("Tests").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                for(DocumentSnapshot doc: queryDocumentSnapshots)
                 {
-                    QuestionPartTwo ques = doc.toObject(QuestionPartTwo.class);
-                    if(!DataLocalManager.isDone(ques.getId())) questionPartTwoList.add(ques);
+                    listTest.add(doc.get("name",String.class));
                 }
-                Log.d("Success retrieve data2", String.valueOf(questionPartTwoList.size()));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("Failed to retrieve data", e.toString());
+                for(String test : listTest)
+                {
+                    db.collection("Tests").document(test).collection("Part2").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(DocumentSnapshot doc: queryDocumentSnapshots)
+                            {
+                                questionPartTwoList.add(doc.toObject(QuestionPartTwo.class));
+                            }
+                            callback.onCallBack(questionPartTwoList);
+                        }
+                    });
+                }
+
             }
         });
     }
-    public static void loadDataPartThree()
-    {
+
+    public static void loadDataPartThree(List<String> listTest, iTrainingCallback<QuestionPartThreeAndFour> callback) {
         questionPartThreeList.clear();
-        db.collection("Quiz").document("Questions").collection("Part3").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                for(String test : listTest)
                 {
-                    QuestionPartThreeAndFour ques = doc.toObject(QuestionPartThreeAndFour.class);
-                    if(!DataLocalManager.isDone(ques.getId())) questionPartThreeList.add(ques);
+                    db.collection("Tests").document(test).collection("Part3").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(DocumentSnapshot doc: queryDocumentSnapshots)
+                            {
+                                questionPartThreeList.add(doc.toObject(QuestionPartThreeAndFour.class));
+                            }
+                            callback.onCallBack(questionPartThreeList);
+                        }
+                    });
                 }
-                Log.d("Success retrieve data3", String.valueOf(questionPartThreeList.size()));
+
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("Failed to retrieve data", e.toString());
-            }
-        });
-    }
-    public static void loadDataPartFour()
-    {
+
+    public static void loadDataPartFour(List<String> listTest, iTrainingCallback<QuestionPartThreeAndFour> callback) {
         questionPartFourList.clear();
-        db.collection("Quiz").document("Questions").collection("Part4").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
+                for(String test : listTest)
                 {
-                    QuestionPartThreeAndFour ques = doc.toObject(QuestionPartThreeAndFour.class);
-                    if(!DataLocalManager.isDone(ques.getId())) questionPartFourList.add(ques);
+                    db.collection("Tests").document(test).collection("Part4").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(DocumentSnapshot doc: queryDocumentSnapshots)
+                            {
+                                questionPartFourList.add(doc.toObject(QuestionPartThreeAndFour.class));
+                            }
+                            callback.onCallBack(questionPartFourList);
+                        }
+                    });
                 }
-                Log.d("Success retrieve data4", String.valueOf(questionPartFourList.size()));
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("Failed to retrieve data", e.toString());
-            }
-        });
-    }
-    public static void loadDataReviewPartOne(String uid)
-    {
+
+
+    public static void loadDataReviewPartOne(String uid, iTrainingCallback<QuestionPartOne> callback) {
 
         questionPartOneReviewList.clear();
-        CollectionReference ref = db.collection("Quiz").document("Questions").collection("Part1");
-        db.collection("User").document(uid).collection("Part1").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
-                {
-                    String questionId = doc.get("id",String.class);
-                    ref.whereEqualTo("id",questionId).limit(1).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
-                            {
-                                QuestionPartOne ques = doc.toObject(QuestionPartOne.class);
-                                questionPartOneReviewList.add(ques);
-                            }
+        db.collection("User").document(uid).collection("Part1").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(DocumentSnapshot doc : queryDocumentSnapshots)
+                        {
+                            QuestionPartOne ques = doc.toObject(QuestionPartOne.class);
+                            questionPartOneReviewList.add(ques);
                         }
-                    });
-                }
-            }
-        });
+                        callback.onCallBack(questionPartOneReviewList);
+                    }
+                });
+
     }
-    public static void loadDataReviewPartTwo(String uid)
-    {
+
+    public static void loadDataReviewPartTwo(String uid, iTrainingCallback<QuestionPartTwo> callback) {
 
         questionPartTwoReviewList.clear();
-        CollectionReference ref = db.collection("Quiz").document("Questions").collection("Part2");
-        db.collection("User").document(uid).collection("Part2").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
-                {
-                    String questionId = doc.get("id",String.class);
-                    ref.whereEqualTo("id",questionId).limit(1).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
-                            {
-                                QuestionPartTwo ques = doc.toObject(QuestionPartTwo.class);
-                                questionPartTwoReviewList.add(ques);
-                            }
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    public static void loadDataReviewPartThree(String uid)
-    {
-        questionPartThreeReviewList.clear();
-        CollectionReference ref = db.collection("Quiz").document("Questions").collection("Part3");
-        db.collection("User").document(uid).collection("Part3").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
-                {
-                    String questionId = doc.get("id",String.class);
-                    ref.whereEqualTo("id",questionId).limit(1).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
-                            {
-                                QuestionPartThreeAndFour ques = doc.toObject(QuestionPartThreeAndFour.class);
-                                questionPartThreeReviewList.add(ques);
-                            }
-                        }
-                    });
-                }
-            }
-        });
-    }
-
-    public static void loadDataReviewPartFour(String uid)
-    {
-        questionPartFourReviewList.clear();
-        CollectionReference ref = db.collection("Quiz").document("Questions").collection("Part4");
-        db.collection("User").document(uid).collection("Part4").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
-                {
-                    String questionId = doc.get("id",String.class);
-                    ref.whereEqualTo("id",questionId).limit(1).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(QueryDocumentSnapshot doc : queryDocumentSnapshots)
-                            {
-                                QuestionPartThreeAndFour ques = doc.toObject(QuestionPartThreeAndFour.class);
-                                questionPartFourReviewList.add(ques);
-                            }
-                        }
-                    });
-                }
-            }
-        });
-    }
-    public static void loadDataToNewUser(String uid)
-    {
-        DocumentReference ref = db.collection("User").document(uid);
-        Map<String, Object> basic_information = new HashMap<>();
-        basic_information.put("id",uid);
-        basic_information.put("goal", 450);
-        basic_information.put("max_score", 0);
-        ref.set(basic_information);
-        
-    }
-    public static void loadUserId()
-    {
-        user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-    }
-    public static void loadUserGoal(String uid)
-    {
-        db.collection("User").document(uid)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        db.collection("User").document(uid).collection("Part2").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                        user_goal = value.getLong("goal");
-                        user_highest_score = value.getLong("max_score");
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(DocumentSnapshot doc : queryDocumentSnapshots)
+                        {
+                            QuestionPartTwo ques = doc.toObject(QuestionPartTwo.class);
+                            questionPartTwoReviewList.add(ques);
+                        }
+                        callback.onCallBack(questionPartTwoReviewList);
+                    }
+                });
+
+    }
+
+    public static void loadDataReviewPartThree(String uid,iTrainingCallback<QuestionPartThreeAndFour> callback) {
+        questionPartThreeReviewList.clear();
+        db.collection("User").document(uid).collection("Part3").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(DocumentSnapshot doc : queryDocumentSnapshots)
+                        {
+                            QuestionPartThreeAndFour ques = doc.toObject(QuestionPartThreeAndFour.class);
+                            questionPartThreeReviewList.add(ques);
+                        }
+                        callback.onCallBack(questionPartThreeList);
                     }
                 });
     }
-    public static void loadDataStatistic()
-    {
-        seriesDataStatistic.clear();
-        CollectionReference ref = DBQuery.db.collection("User").document(DBQuery.user_id)
+
+    public static void loadDataReviewPartFour(String uid,iTrainingCallback<QuestionPartThreeAndFour> callback) {
+        questionPartFourReviewList.clear();
+        db.collection("User").document(uid).collection("Part4").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for(DocumentSnapshot doc : queryDocumentSnapshots)
+                        {
+                            QuestionPartThreeAndFour ques = doc.toObject(QuestionPartThreeAndFour.class);
+                            questionPartFourReviewList.add(ques);
+                        }
+                        callback.onCallBack(questionPartFourList);
+                    }
+                });
+    }
+
+    public static void loadDataToNewUser(String uid) {
+        DocumentReference ref = db.collection("User").document(uid);
+        Map<String, Object> basic_information = new HashMap<>();
+        basic_information.put("id", uid);
+        basic_information.put("goal", 450);
+        basic_information.put("max_score", 0);
+        ref.set(basic_information);
+
+    }
+
+    public static void loadUserGoal(String uid, iUserGoalCallback callback) {
+        db.collection("User").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                long user_goal = documentSnapshot.getLong("goal");
+                long user_highest_score = documentSnapshot.getLong("max_score");
+                callback.onCallBack(user_goal, user_highest_score);
+            }
+        });
+
+    }
+
+    public static void updateStatisticValues(int part_num) {
+        String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date localDate = new Date();
+        DocumentReference ref = DBQuery.db.collection("User").document(user_id)
+                .collection("Statistic").document(sdf.format(localDate));
+        int increaseValue = 1;
+        if (part_num == 3 || part_num == 4) increaseValue = 3;
+        ref.update("num_part" + part_num, FieldValue.increment(increaseValue));
+    }
+
+    public static void loadDataStatistic(iDataStatisticCallback callback) {
+        String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        ArrayList<DataStatistic> res = new ArrayList<>();
+        CollectionReference ref = DBQuery.db.collection("User").document(user_id)
                 .collection("Statistic");
         ref.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(DocumentSnapshot doc : queryDocumentSnapshots)
-                {
-                    long num_part1=0, num_part2=0, num_part3=0, num_part4=0;
-                    num_part1 =(long ) doc.get("num_part1");
-                    num_part2 =(long ) doc.get("num_part2");
-                    num_part3 =(long ) doc.get("num_part3");
-                    num_part4 =(long ) doc.get("num_part4");
-                    Log.d(doc.getId(), num_part1 + " " + num_part2 + " " + num_part3 +" " + num_part4);
-                    seriesDataStatistic.add(new StatisticDataEntry(doc.getId().substring(0,5),num_part1,num_part2,num_part3,num_part4));
+
+                for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                    DataStatistic dataStatistic = new DataStatistic();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                    try {
+                        Date date = sdf.parse(doc.getId());
+                        dataStatistic.setDate(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    dataStatistic.setNum_part1((long) doc.get("num_part1"));
+                    dataStatistic.setNum_part2((long) doc.get("num_part2"));
+                    dataStatistic.setNum_part3((long) doc.get("num_part3"));
+                    dataStatistic.setNum_part4((long) doc.get("num_part4"));
+                    res.add(dataStatistic);
                 }
+                Collections.sort(res, new Comparator<DataStatistic>() {
+                    @Override
+                    public int compare(DataStatistic data1, DataStatistic data2) {
+                        if (data1.getDate().before(data2.getDate())) return -1;
+                        else return 1;
+                    }
+                });
+                for (int i = 0; i < res.size(); i++) {
+                    Log.d("Statistic", res.get(i).toString());
+                }
+                callback.onCallBack(res);
             }
         });
     }
 
+    public interface iDataStatisticCallback {
+        void onCallBack(ArrayList<DataStatistic> res);
+    }
+    public interface iTrainingCallback <T extends Question> {
+        void onCallBack(List<T> res);
+    }
+
+    public interface iTestNameCallback {
+        void onCallBack(List<String> res);
+    }
+
+    public interface iUserGoalCallback
+    {
+        void onCallBack(long user_goal, long highest_score);
+    }
 }

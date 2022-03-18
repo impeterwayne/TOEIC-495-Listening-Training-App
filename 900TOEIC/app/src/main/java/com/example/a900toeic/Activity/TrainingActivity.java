@@ -1,5 +1,6 @@
 package com.example.a900toeic.Activity;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,8 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +29,11 @@ import com.example.a900toeic.Adapter.TrainingPartThreeAdapter;
 import com.example.a900toeic.Adapter.TrainingPartTwoAdapter;
 import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.Model.Question;
+import com.example.a900toeic.Model.QuestionPartOne;
+import com.example.a900toeic.Model.QuestionPartThreeAndFour;
+import com.example.a900toeic.Model.QuestionPartTwo;
 import com.example.a900toeic.R;
+import com.example.a900toeic.Utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,12 +42,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TrainingActivity extends AppCompatActivity {
+    private ProgressBar progressBar;
     private ViewPager2 mViewPager;
     private Toolbar toolbar;
     private TextView txt_toolbar_part, txt_toolbar_description;
@@ -52,7 +57,6 @@ public class TrainingActivity extends AppCompatActivity {
     private Runnable runnable;
     private Handler handler;
     private int partId;
-    private List<Question> questionList = new ArrayList<>();
     private static String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     @Override
@@ -61,15 +65,11 @@ public class TrainingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_training);
         addControls();
         loadData();
-        if (questionList.size() > 0) {
-            playAudioFile(0);
-            handleBookmarkButton(0);
-        }
-        addEvents();
+
     }
 
     private void addControls() {
-
+        progressBar = findViewById(R.id.progressBar);
         mViewPager = findViewById(R.id.viewpager_training);
         toolbar = findViewById(R.id.toolbar);
         btn_backward = findViewById(R.id.btn_backward);
@@ -86,85 +86,177 @@ public class TrainingActivity extends AppCompatActivity {
 
     private void loadData() {
         partId = getIntent().getIntExtra("part", 1);
-        questionList.clear();
         switch (partId) {
             case 1:
-                for (int i = 0; i < DBQuery.questionPartOneList.size(); i++) {
-                    questionList.add(DBQuery.questionPartOneList.get(i));
-                }
-                TrainingPartOneAdapter mTrainingPartOneAdapter = new TrainingPartOneAdapter(this);
-                mViewPager.setAdapter(mTrainingPartOneAdapter);
-                txt_toolbar_part.setText("Part One Training");
-                txt_toolbar_description.setText(CategoryAdapter.categories[0].getDescription());
+                    DBQuery.loadTestNameList(new DBQuery.iTestNameCallback() {
+                        @Override
+                        public void onCallBack(List<String> res) {
+                            DBQuery.loadDataPartOne(res, new DBQuery.iTrainingCallback<QuestionPartOne>() {
+                                @Override
+                                public void onCallBack(List<QuestionPartOne> res) {
+
+                                    progressBar.setVisibility(View.GONE);
+                                    TrainingPartOneAdapter mTrainingPartOneAdapter = new TrainingPartOneAdapter(TrainingActivity.this, res);
+                                    mViewPager.setAdapter(mTrainingPartOneAdapter);
+                                    txt_toolbar_part.setText("Part One Training");
+                                    txt_toolbar_description.setText(CategoryAdapter.categories[0].getDescription());
+                                    if (res.size() > 0) {
+                                        playAudioFile(res,0);
+                                        handleBookmarkButton(res,0);
+                                    }
+                                    addEvents(res);
+                                }
+                            });
+                        }
+                    });
                 break;
             case 2:
-                for (int i = 0; i < DBQuery.questionPartTwoList.size(); i++) {
-                    questionList.add(DBQuery.questionPartTwoList.get(i));
-                }
-                TrainingPartTwoAdapter mTrainingPartTwoAdapter = new TrainingPartTwoAdapter(this);
-                mViewPager.setAdapter(mTrainingPartTwoAdapter);
-                txt_toolbar_part.setText("Part Two Training");
-                txt_toolbar_description.setText(CategoryAdapter.categories[1].getDescription());
+                DBQuery.loadTestNameList(new DBQuery.iTestNameCallback() {
+                    @Override
+                    public void onCallBack(List<String> res) {
+                        DBQuery.loadDataPartTwo(res, new DBQuery.iTrainingCallback<QuestionPartTwo>() {
+                            @Override
+                            public void onCallBack(List<QuestionPartTwo> res) {
+                                progressBar.setVisibility(View.GONE);
+                                TrainingPartTwoAdapter mTrainingPartTwoAdapter = new TrainingPartTwoAdapter(TrainingActivity.this, res);
+                                mViewPager.setAdapter(mTrainingPartTwoAdapter);
+                                txt_toolbar_part.setText("Part Two Training");
+                                txt_toolbar_description.setText(CategoryAdapter.categories[1].getDescription());
+                                if (res.size() > 0) {
+                                    playAudioFile(res,0);
+                                    handleBookmarkButton(res,0);
+                                }
+                                addEvents(res);
+                            }
+                        });
+                    }
+                });
                 break;
             case 3:
-                for (int i = 0; i < DBQuery.questionPartThreeList.size(); i++) {
-                    questionList.add(DBQuery.questionPartThreeList.get(i));
-                }
-                TrainingPartThreeAdapter mTrainingPartThreeAdapter = new TrainingPartThreeAdapter(this);
-                mViewPager.setAdapter(mTrainingPartThreeAdapter);
-                txt_toolbar_part.setText("Part Three Training");
-                txt_toolbar_description.setText(CategoryAdapter.categories[2].getDescription());
+                DBQuery.loadTestNameList(new DBQuery.iTestNameCallback() {
+                    @Override
+                    public void onCallBack(List<String> res) {
+                        DBQuery.loadDataPartThree(res, new DBQuery.iTrainingCallback<QuestionPartThreeAndFour>() {
+                            @Override
+                            public void onCallBack(List<QuestionPartThreeAndFour> res) {
+
+                                progressBar.setVisibility(View.GONE);
+                                TrainingPartThreeAdapter mTrainingPartThreeAdapter = new TrainingPartThreeAdapter(TrainingActivity.this, res);
+                                mViewPager.setAdapter(mTrainingPartThreeAdapter);
+                                txt_toolbar_part.setText("Part Three Training");
+                                txt_toolbar_description.setText(CategoryAdapter.categories[2].getDescription());
+                                if (res.size() > 0) {
+                                    playAudioFile(res,0);
+                                    handleBookmarkButton(res,0);
+                                }
+                                addEvents(res);
+                            }
+                        });
+                    }
+                });
                 break;
             case 4:
-                for (int i = 0; i < DBQuery.questionPartFourList.size(); i++) {
-                    questionList.add(DBQuery.questionPartFourList.get(i));
-                }
-                TrainingPartFourAdapter mTrainingPartFourAdapter = new TrainingPartFourAdapter(this);
-                mViewPager.setAdapter(mTrainingPartFourAdapter);
-                txt_toolbar_part.setText("Part Four Training");
-                txt_toolbar_description.setText(CategoryAdapter.categories[3].getDescription());
-                break;
+                DBQuery.loadTestNameList(new DBQuery.iTestNameCallback() {
+                    @Override
+                    public void onCallBack(List<String> res) {
+                        DBQuery.loadDataPartFour(res, new DBQuery.iTrainingCallback<QuestionPartThreeAndFour>() {
+                            @Override
+                            public void onCallBack(List<QuestionPartThreeAndFour> res) {
+                                progressBar.setVisibility(View.GONE);
+                                TrainingPartFourAdapter mTrainingPartFourAdapter = new TrainingPartFourAdapter(TrainingActivity.this, res);
+                                mViewPager.setAdapter(mTrainingPartFourAdapter);
+                                txt_toolbar_part.setText("Part Four Training");
+                                txt_toolbar_description.setText(CategoryAdapter.categories[3].getDescription());
+                                if (res.size() > 0) {
+                                    playAudioFile(res,0);
+                                    handleBookmarkButton(res,0);
+                                }
+                                addEvents(res);
+                            }
+                        });
+                    }
+                });
             case 11:
-                for (int i = 0; i < DBQuery.questionPartOneReviewList.size(); i++) {
-                    questionList.add(DBQuery.questionPartOneReviewList.get(i));
-                }
-                Log.d("QuestionListSize", questionList.size()+"");
-                ReviewPartOneAdapter mReviewPartOneAdapter = new ReviewPartOneAdapter(this);
-                mViewPager.setAdapter(mReviewPartOneAdapter);
-                txt_toolbar_part.setText("Part One Review");
-                txt_toolbar_description.setText(CategoryAdapter.categories[0].getDescription());
+                DBQuery.loadDataReviewPartOne(user_id, new DBQuery.iTrainingCallback<QuestionPartOne>() {
+                    @Override
+                    public void onCallBack(List<QuestionPartOne> res) {
+
+                        progressBar.setVisibility(View.GONE);
+                        ReviewPartOneAdapter mReviewPartOneAdapter = new ReviewPartOneAdapter(TrainingActivity.this,res);
+                        mViewPager.setAdapter(mReviewPartOneAdapter);
+                        txt_toolbar_part.setText("Part One Review");
+                        txt_toolbar_description.setText(CategoryAdapter.categories[0].getDescription());
+                        if (res.size() > 0) {
+                            playAudioFile(res,0);
+                            handleBookmarkButton(res,0);
+                        }
+                        addEvents(res);
+                    }
+                });
+
                 break;
             case 12:
-                for (int i = 0; i < DBQuery.questionPartTwoReviewList.size(); i++) {
-                    questionList.add(DBQuery.questionPartTwoReviewList.get(i));
-                }
-                ReviewPartTwoAdapter mReviewPartTwoAdapter = new ReviewPartTwoAdapter(this);
-                mViewPager.setAdapter(mReviewPartTwoAdapter);
-                txt_toolbar_part.setText("Part Two Review");
-                txt_toolbar_description.setText(CategoryAdapter.categories[1].getDescription());
+                DBQuery.loadDataReviewPartTwo(user_id, new DBQuery.iTrainingCallback<QuestionPartTwo>() {
+                    @Override
+                    public void onCallBack(List<QuestionPartTwo> res) {
+
+                        progressBar.setVisibility(View.GONE);
+                        ReviewPartTwoAdapter mReviewPartTwoAdapter = new ReviewPartTwoAdapter(TrainingActivity.this,res);
+                        mViewPager.setAdapter(mReviewPartTwoAdapter);
+                        txt_toolbar_part.setText("Part Two Review");
+                        txt_toolbar_description.setText(CategoryAdapter.categories[1].getDescription());
+                        if (res.size() > 0) {
+                            playAudioFile(res,0);
+                            handleBookmarkButton(res,0);
+                        }
+                        addEvents(res);
+                    }
+                });
                 break;
             case 13:
-                for (int i = 0; i < DBQuery.questionPartThreeReviewList.size(); i++) {
-                    questionList.add(DBQuery.questionPartThreeReviewList.get(i));
-                }
-                ReviewPartThreeAdapter mReviewPartThreeAdapter = new ReviewPartThreeAdapter(this);
-                mViewPager.setAdapter(mReviewPartThreeAdapter);
-                txt_toolbar_part.setText("Part Three Review");
-                txt_toolbar_description.setText(CategoryAdapter.categories[2].getDescription());
+                DBQuery.loadDataReviewPartThree(user_id, new DBQuery.iTrainingCallback<QuestionPartThreeAndFour>() {
+                    @Override
+                    public void onCallBack(List<QuestionPartThreeAndFour> res) {
+
+                        progressBar.setVisibility(View.GONE);
+                        ReviewPartThreeAdapter mReviewPartThreeAdapter = new ReviewPartThreeAdapter(TrainingActivity.this,res);
+                        mViewPager.setAdapter(mReviewPartThreeAdapter);
+                        txt_toolbar_part.setText("Part Three Review");
+                        txt_toolbar_description.setText(CategoryAdapter.categories[2].getDescription());
+                        if (res.size() > 0) {
+                            playAudioFile(res,0);
+                            handleBookmarkButton(res,0);
+                        }
+                        addEvents(res);
+                    }
+                });
                 break;
             case 14:
-                for (int i = 0; i < DBQuery.questionPartFourReviewList.size(); i++) {
-                    questionList.add(DBQuery.questionPartFourReviewList.get(i));
-                }
-                ReviewPartFourAdapter mReviewPartFourAdapter = new ReviewPartFourAdapter(this);
-                mViewPager.setAdapter(mReviewPartFourAdapter);
-                txt_toolbar_part.setText("Part Four Review");
-                txt_toolbar_description.setText(CategoryAdapter.categories[3].getDescription());
+                DBQuery.loadDataReviewPartThree(user_id, new DBQuery.iTrainingCallback<QuestionPartThreeAndFour>() {
+                    @Override
+                    public void onCallBack(List<QuestionPartThreeAndFour> res) {
+
+                        progressBar.setVisibility(View.GONE);
+                        ReviewPartFourAdapter mReviewPartFourAdapter = new ReviewPartFourAdapter(TrainingActivity.this,res);
+                        mViewPager.setAdapter(mReviewPartFourAdapter);
+                        txt_toolbar_part.setText("Part Three Review");
+                        txt_toolbar_description.setText(CategoryAdapter.categories[3].getDescription());
+                        if (res.size() > 0) {
+                            playAudioFile(res,0);
+                            handleBookmarkButton(res,0);
+                        }
+                        addEvents(res);
+                    }
+                });
                 break;
         }
     }
-
-    private void addEvents() {
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(TrainingActivity.this, MainActivity.class));
+        finish();
+    }
+    private <T extends Question>void addEvents(List<T> questionList) {
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,7 +267,7 @@ public class TrainingActivity extends AppCompatActivity {
                     mediaPlayer.release();
                     seek_bar.setEnabled(false);
                 }
-                refreshDataTraining(user_id);
+                startActivity(new Intent(TrainingActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -197,7 +289,7 @@ public class TrainingActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (mediaPlayer.isPlaying()) {
-                        btn_play.setImageResource(R.drawable.ic_play);
+                        btn_play.setImageResource(R.drawable.ic_play_white);
                         mediaPlayer.pause();
                     } else {
                         btn_play.setImageResource(R.drawable.ic_pause);
@@ -230,8 +322,8 @@ public class TrainingActivity extends AppCompatActivity {
                 @Override
                 public void onPageSelected(int position) {
                     super.onPageSelected(position);
-                    playAudioFile(position);
-                    handleBookmarkButton(position);
+                    playAudioFile(questionList,position);
+                    handleBookmarkButton(questionList,position);
 
                 }
             });
@@ -240,37 +332,49 @@ public class TrainingActivity extends AppCompatActivity {
         }
 
     }
+    private <T extends Question> String loadPartNumberForBookmarking(List<T> questionList, int position)
+    {
+        if(partId>=1&&partId<=4)
+        {
+            String partNumber = "Part" + partId;
+            DBQuery.db.collection("User").document(user_id).collection(partNumber)
+                    .whereEqualTo("id", questionList.get(position).getId()).get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                if (task.getResult().size() > 0) {
 
-    private void handleBookmarkButton(int position) {
-        String part = "Part" + partId;
-        DBQuery.db.collection("User").document(user_id).collection(part)
-                .whereEqualTo("id", questionList.get(position).getId()).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if (task.getResult().size() > 0) {
-                                btn_bookmark.setImageResource(R.drawable.ic_bookmarked);
-                                btn_bookmark.setTag("bookmarked");
-                            } else {
-                                btn_bookmark.setImageResource(R.drawable.ic_bookmark);
-                                btn_bookmark.setTag("bookmark");
+                                } else {
+                                    btn_bookmark.setImageResource(R.drawable.ic_bookmark_white);
+                                    btn_bookmark.setTag("bookmark");
+                                }
                             }
                         }
-                    }
-                });
+                    });
+            return partNumber;
+        }else {
+            btn_bookmark.setImageResource(R.drawable.ic_bookmarked_white);
+            btn_bookmark.setTag("bookmarked");
+            return "Part" + (partId-10);
+        }
+    }
+    private <T extends Question>void handleBookmarkButton(List<T> questionList, int position) {
+
+
+        String finalPartNumber = loadPartNumberForBookmarking(questionList,position);
         btn_bookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (btn_bookmark.getTag().equals("bookmarked")) {
-                    btn_bookmark.setImageResource(R.drawable.ic_bookmark);
+                    btn_bookmark.setImageResource(R.drawable.ic_bookmark_white);
                     btn_bookmark.setTag("bookmark");
-                    DBQuery.db.collection("User").document(user_id).collection(part)
+                    DBQuery.db.collection("User").document(user_id).collection(finalPartNumber)
                             .document(questionList.get(position).getId()).
                             delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            Log.d("Delete successfully", questionList.get(position).getId());
+                            Toast.makeText(TrainingActivity.this, "Removed successfully",Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -279,18 +383,16 @@ public class TrainingActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    btn_bookmark.setImageResource(R.drawable.ic_bookmarked);
+                    btn_bookmark.setImageResource(R.drawable.ic_bookmarked_white);
                     btn_bookmark.setTag("bookmarked");
-                    Map<String, String> value = new HashMap<>();
-                    value.put("id", questionList.get(position).getId());
-                    DBQuery.db.collection("User").document(user_id).collection(part)
-                            .document(questionList.get(position).getId()).set(value);
+                    DBQuery.db.collection("User").document(user_id).collection(finalPartNumber)
+                            .document(questionList.get(position).getId()).set(questionList.get(position));
                 }
             }
         });
     }
 
-    private void playAudioFile(int position) {
+    private <T extends Question> void playAudioFile(List<T> questionList,int position) {
         btn_play.setImageResource(R.drawable.ic_pause);
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -307,7 +409,7 @@ public class TrainingActivity extends AppCompatActivity {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 seek_bar.setMax(mediaPlayer.getDuration());
-                txt_timeline.setText(getTimeString(mediaPlayer.getDuration()));
+                txt_timeline.setText(Utils.getTimeString(mediaPlayer.getDuration()));
                 mediaPlayer.start();
                 updateSeekBar();
             }
@@ -327,7 +429,7 @@ public class TrainingActivity extends AppCompatActivity {
                         {
                             btn_play.setImageResource(R.drawable.ic_pause);
                         }else {
-                            btn_play.setImageResource(R.drawable.ic_play);
+                            btn_play.setImageResource(R.drawable.ic_play_white);
                         }
                     }catch (IllegalStateException ex)
                     {
@@ -342,38 +444,13 @@ public class TrainingActivity extends AppCompatActivity {
 
         }
     }
-    private String getTimeString(long millis) {
-        StringBuffer buf = new StringBuffer();
-        int minutes = (int) ((millis % (1000 * 60 * 60)) / (1000 * 60));
-        int seconds = (int) (((millis % (1000 * 60 * 60)) % (1000 * 60)) / 1000);
-        buf
-                .append(String.format("%02d", minutes))
-                .append(":")
-                .append(String.format("%02d", seconds));
-        return buf.toString();
-    }
 
     @Override
     protected void onStop() {
         super.onStop();
         if(mediaPlayer!=null)
         {
-            mediaPlayer.stop();
             mediaPlayer.release();
         }
-        refreshData();
-    }
-    private void refreshData() {
-        DBQuery.loadDataPartOne();
-        DBQuery.loadDataPartTwo();
-        DBQuery.loadDataPartThree();
-        DBQuery.loadDataPartFour();
-    }
-    private void refreshDataTraining(String uid)
-    {
-        DBQuery.loadDataReviewPartOne(uid);
-        DBQuery.loadDataReviewPartTwo(uid);
-        DBQuery.loadDataReviewPartThree(uid);
-        DBQuery.loadDataReviewPartFour(uid);
     }
 }

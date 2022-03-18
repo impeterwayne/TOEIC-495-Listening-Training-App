@@ -14,7 +14,7 @@
             android:orientation="vertical"
             android:gravity="center">
             <TextView
-                android:id="@+id/txt_script1"
+                android:id="@+id/txt_question1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold|italic"
@@ -30,7 +30,7 @@
                 android:gravity="center_vertical"
                 android:layout_marginHorizontal="8dp">
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_keyA"
+                    android:id="@+id/btn_key1A"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:layout_width="0dp"
@@ -39,7 +39,7 @@
                     android:background="@drawable/bg_button"
                     android:layout_marginRight="5dp"/>
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_keyB"
+                    android:id="@+id/btn_key1B"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:layout_weight="1"
@@ -55,7 +55,7 @@
                 android:gravity="center_vertical"
                 android:layout_marginHorizontal="8dp">
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_keyC"
+                    android:id="@+id/btn_key1C"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:layout_width="0dp"
@@ -64,7 +64,7 @@
                     android:background="@drawable/bg_button"
                     android:layout_marginRight="5dp"/>
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_keyD"
+                    android:id="@+id/btn_key1D"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:layout_weight="1"
@@ -73,7 +73,7 @@
                     android:background="@drawable/bg_button"/>
             </LinearLayout>
             <TextView
-                android:id="@+id/txt_script2"
+                android:id="@+id/txt_question2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold|italic"
@@ -132,7 +132,7 @@
                     android:background="@drawable/bg_button"/>
             </LinearLayout>
             <TextView
-                android:id="@+id/txt_script3"
+                android:id="@+id/txt_question3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold|italic"

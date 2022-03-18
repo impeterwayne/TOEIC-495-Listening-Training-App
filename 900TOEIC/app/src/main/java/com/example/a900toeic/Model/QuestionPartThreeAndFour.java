@@ -1,54 +1,26 @@
 package com.example.a900toeic.Model;
 
 public class QuestionPartThreeAndFour extends Question{
-    private String key2, key3;
-    private String script1;
-    private String script2;
-    private String script3;
-    private String keyA,keyB,keyC,keyD;
-    private String key2A,key2B,key2C,key2D;
-    private String key3A,key3B,key3C,key3D;
+    private String key1, key2, key3;
+    private String question1;
+    private String question2;
+    private String question3;
+    private String script_key1A,script_key1B,script_key1C,script_key1D;
+    private String script_key2A,script_key2B,script_key2C,script_key2D;
+    private String script_key3A,script_key3B,script_key3C,script_key3D;
     private String image_url;
-
+    private String script;
+    private long number1, number2, number3;
     public QuestionPartThreeAndFour() {
-    }
-    public String getScript1() {
-        return script1;
+        super();
     }
 
-    public void setScript1(String script1) {
-        this.script1 = script1;
-    }
-    public String getKeyA() {
-        return keyA;
+    public String getKey1() {
+        return key1;
     }
 
-    public void setKeyA(String keyA) {
-        this.keyA = keyA;
-    }
-
-    public String getKeyB() {
-        return keyB;
-    }
-
-    public void setKeyB(String keyB) {
-        this.keyB = keyB;
-    }
-
-    public String getKeyC() {
-        return keyC;
-    }
-
-    public void setKeyC(String keyC) {
-        this.keyC = keyC;
-    }
-
-    public String getKeyD() {
-        return keyD;
-    }
-
-    public void setKeyD(String keyD) {
-        this.keyD = keyD;
+    public void setKey1(String key1) {
+        this.key1 = key1;
     }
 
     public String getKey2() {
@@ -67,6 +39,126 @@ public class QuestionPartThreeAndFour extends Question{
         this.key3 = key3;
     }
 
+    public String getQuestion1() {
+        return question1;
+    }
+
+    public void setQuestion1(String question1) {
+        this.question1 = question1;
+    }
+
+    public String getQuestion2() {
+        return question2;
+    }
+
+    public void setQuestion2(String question2) {
+        this.question2 = question2;
+    }
+
+    public String getQuestion3() {
+        return question3;
+    }
+
+    public void setQuestion3(String question3) {
+        this.question3 = question3;
+    }
+
+    public String getScript_key1A() {
+        return script_key1A;
+    }
+
+    public void setScript_key1A(String script_key1A) {
+        this.script_key1A = script_key1A;
+    }
+
+    public String getScript_key1B() {
+        return script_key1B;
+    }
+
+    public void setScript_key1B(String script_key1B) {
+        this.script_key1B = script_key1B;
+    }
+
+    public String getScript_key1C() {
+        return script_key1C;
+    }
+
+    public void setScript_key1C(String script_key1C) {
+        this.script_key1C = script_key1C;
+    }
+
+    public String getScript_key1D() {
+        return script_key1D;
+    }
+
+    public void setScript_key1D(String script_key1D) {
+        this.script_key1D = script_key1D;
+    }
+
+    public String getScript_key2A() {
+        return script_key2A;
+    }
+
+    public void setScript_key2A(String script_key2A) {
+        this.script_key2A = script_key2A;
+    }
+
+    public String getScript_key2B() {
+        return script_key2B;
+    }
+
+    public void setScript_key2B(String script_key2B) {
+        this.script_key2B = script_key2B;
+    }
+
+    public String getScript_key2C() {
+        return script_key2C;
+    }
+
+    public void setScript_key2C(String script_key2C) {
+        this.script_key2C = script_key2C;
+    }
+
+    public String getScript_key2D() {
+        return script_key2D;
+    }
+
+    public void setScript_key2D(String script_key2D) {
+        this.script_key2D = script_key2D;
+    }
+
+    public String getScript_key3A() {
+        return script_key3A;
+    }
+
+    public void setScript_key3A(String script_key3A) {
+        this.script_key3A = script_key3A;
+    }
+
+    public String getScript_key3B() {
+        return script_key3B;
+    }
+
+    public void setScript_key3B(String script_key3B) {
+        this.script_key3B = script_key3B;
+    }
+
+    public String getScript_key3C() {
+        return script_key3C;
+    }
+
+    public void setScript_key3C(String script_key3C) {
+        this.script_key3C = script_key3C;
+    }
+
+    public String getScript_key3D() {
+        return script_key3D;
+    }
+
+    public void setScript_key3D(String script_key3D) {
+        this.script_key3D = script_key3D;
+    }
+
     public String getImage_url() {
         return image_url;
     }
@@ -75,83 +167,35 @@ public class QuestionPartThreeAndFour extends Question{
         this.image_url = image_url;
     }
 
-    public String getScript2() {
-        return script2;
+    public String getScript() {
+        return script;
     }
 
-    public void setScript2(String script2) {
-        this.script2 = script2;
+    public void setScript(String script) {
+        this.script = script;
     }
 
-    public String getScript3() {
-        return script3;
+    public long getNumber1() {
+        return number1;
     }
 
-    public void setScript3(String script3) {
-        this.script3 = script3;
+    public void setNumber1(long number1) {
+        this.number1 = number1;
     }
 
-    public String getKey2A() {
-        return key2A;
+    public long getNumber2() {
+        return number2;
     }
 
-    public void setKey2A(String key2A) {
-        this.key2A = key2A;
+    public void setNumber2(long number2) {
+        this.number2 = number2;
     }
 
-    public String getKey2B() {
-        return key2B;
+    public long getNumber3() {
+        return number3;
     }
 
-    public void setKey2B(String key2B) {
-        this.key2B = key2B;
-    }
-
-    public String getKey2C() {
-        return key2C;
-    }
-
-    public void setKey2C(String key2C) {
-        this.key2C = key2C;
-    }
-
-    public String getKey2D() {
-        return key2D;
-    }
-
-    public void setKey2D(String key2D) {
-        this.key2D = key2D;
-    }
-
-    public String getKey3A() {
-        return key3A;
-    }
-
-    public void setKey3A(String key3A) {
-        this.key3A = key3A;
-    }
-
-    public String getKey3B() {
-        return key3B;
-    }
-
-    public void setKey3B(String key3B) {
-        this.key3B = key3B;
-    }
-
-    public String getKey3C() {
-        return key3C;
-    }
-
-    public void setKey3C(String key3C) {
-        this.key3C = key3C;
-    }
-
-    public String getKey3D() {
-        return key3D;
-    }
-
-    public void setKey3D(String key3D) {
-        this.key3D = key3D;
+    public void setNumber3(long number3) {
+        this.number3 = number3;
     }
 }

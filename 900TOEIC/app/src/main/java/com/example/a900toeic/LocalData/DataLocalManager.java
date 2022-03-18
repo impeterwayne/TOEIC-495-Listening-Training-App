@@ -2,7 +2,8 @@ package com.example.a900toeic.LocalData;
 
 import android.content.Context;
 
-import java.util.Set;
+import com.example.a900toeic.Model.Answer;
+import com.google.gson.Gson;
 
 public class DataLocalManager {
     private static final String PREF_IS_FIRST_INSTALL = "PREF_IS_FIRST_INSTALL";
@@ -18,6 +19,7 @@ public class DataLocalManager {
         if(instance==null) return new DataLocalManager();
         else return instance;
     }
+
     public static void setFirstInstall(boolean isFirst)
     {
         DataLocalManager.getInstance().mySharedPreferences.putBooleanValue(PREF_IS_FIRST_INSTALL, isFirst);
@@ -35,17 +37,28 @@ public class DataLocalManager {
         boolean res =  DataLocalManager.getInstance().mySharedPreferences.getBooleanValue(question_id);
         return res;
     }
-    public static void addKeyClick(long number, String keyClick)
+
+    public static void addAnswer(Answer answer)
     {
-        DataLocalManager.getInstance().mySharedPreferences.putStringValue(String.valueOf(number),keyClick);
+
+        Gson gson = new Gson();
+        String answerInJson = gson.toJson(answer);
+        DataLocalManager.getInstance().mySharedPreferences.putStringValue(String.valueOf(answer.getAnswerNum()),answerInJson);
     }
-    public static String getKeyClick(long number)
+    public static Answer getAnswer(long answerNumber)
     {
-        return DataLocalManager.getInstance().mySharedPreferences.getStringValue(number+"");
+        Gson gson = new Gson();
+        String answerInJson = DataLocalManager.getInstance().mySharedPreferences.getStringValue(String.valueOf(answerNumber));
+        if(answerInJson.equals("")) return null;
+        else
+        {
+            Answer answer = gson.fromJson(answerInJson, Answer.class);
+            return answer;
+        }
     }
-    public static void clearKeyClick()
+    public static void clearAnswers()
     {
-        DataLocalManager.getInstance().mySharedPreferences.clearKey();
+        DataLocalManager.getInstance().mySharedPreferences.clearTestAnswers();
     }
 
 }

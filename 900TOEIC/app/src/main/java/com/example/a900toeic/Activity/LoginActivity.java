@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import com.example.a900toeic.Database.DBQuery;
-import com.example.a900toeic.LocalData.StatisticDataEntry;
 import com.example.a900toeic.R;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -109,7 +108,8 @@ public class LoginActivity extends AppCompatActivity {
         btn_facebook_sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("email", "public_profile"));
+                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this,
+                            Arrays.asList("email", "public_profile"));
             }
         });
 
@@ -131,7 +131,6 @@ public class LoginActivity extends AppCompatActivity {
                             {
                                 DBQuery.loadDataToNewUser(user.getUid());
                             }
-                            loadAllData();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -173,7 +172,7 @@ public class LoginActivity extends AppCompatActivity {
                             {
                                 DBQuery.loadDataToNewUser(user.getUid());
                             }
-                            loadAllData();
+
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -186,14 +185,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void loadAllData() {
-        DBQuery.loadDataPartOne();
-        DBQuery.loadDataPartTwo();
-        DBQuery.loadDataPartThree();
-        DBQuery.loadDataPartFour();
-        DBQuery.loadUserGoal(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        DBQuery.loadUserId();
-    }
 
     private boolean userExisted(String uid) {
         final boolean[] res = new boolean[1];

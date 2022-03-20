@@ -1,13 +1,12 @@
 package com.example.a900toeic.Activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.a900toeic.Adapter.ResultAdapter;
 import com.example.a900toeic.LocalData.DataLocalManager;
 import com.example.a900toeic.Model.Answer;
@@ -19,6 +18,8 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,7 +37,10 @@ public class ResultActivity extends AppCompatActivity {
     private Map<Long, String> keyMap;
     @Override
     public void onBackPressed() {
-        finish();
+        Intent intent = new Intent(this, RealTestActivity.class);
+        intent.putExtra("listAnswer", (Serializable) answerList);
+        startActivity(intent);
+
     }
     @Override
     protected void onDestroy() {
@@ -44,7 +48,6 @@ public class ResultActivity extends AppCompatActivity {
         DataLocalManager.clearAnswers();
         super.onDestroy();
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +64,7 @@ public class ResultActivity extends AppCompatActivity {
     private void displayListAnswers() {
         resultAdapter = new ResultAdapter(ResultActivity.this, answerList);
         rcv_result.setLayoutManager(new LinearLayoutManager(this));
+        rcv_result.setHasFixedSize(true);
         rcv_result.setOverScrollMode(View.OVER_SCROLL_NEVER);
         rcv_result.setAdapter(resultAdapter);
     }

@@ -60,5 +60,13 @@ public class DataLocalManager {
     {
         DataLocalManager.getInstance().mySharedPreferences.clearTestAnswers();
     }
+    public static void addTestName(String testName)
+    {
+        DataLocalManager.getInstance().mySharedPreferences.putStringValue("testName",testName);
+    }
+    public static String getTestName()
+    {
+       return DataLocalManager.getInstance().mySharedPreferences.getStringValue("testName");
+    }
 
 }

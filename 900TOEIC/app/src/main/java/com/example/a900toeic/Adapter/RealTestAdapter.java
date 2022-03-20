@@ -18,6 +18,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a900toeic.Activity.RealTestActivity;
+import com.example.a900toeic.LocalData.DataLocalManager;
 import com.example.a900toeic.Model.RealTest;
 import com.example.a900toeic.R;
 
@@ -85,9 +86,8 @@ public class RealTestAdapter extends RecyclerView.Adapter<RealTestAdapter.ViewHo
                 public void onClick(View view) {
                     dialog.dismiss();
                     Intent intent = new Intent(context, RealTestActivity.class);
-                    intent.putExtra("testName", testList.get(getAdapterPosition()).getName());
+                    DataLocalManager.addTestName(txt_testName.getText().toString());
                     context.startActivity(intent);
-
                 }
             });
             btn_cancel.setOnClickListener(new View.OnClickListener() {

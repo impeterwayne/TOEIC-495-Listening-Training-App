@@ -1,8 +1,8 @@
 package com.example.a900toeic.Model;
 
-import java.util.Objects;
+import java.io.Serializable;
 
-public class Answer {
+public class Answer implements Serializable {
     private long answerNum;
     private String correctKey;
     private String keyClick;

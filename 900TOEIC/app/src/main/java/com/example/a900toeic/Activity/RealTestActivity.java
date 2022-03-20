@@ -15,6 +15,7 @@ import com.example.a900toeic.Adapter.RealTestPartThreeAndFourAdapter;
 import com.example.a900toeic.Adapter.RealTestPartTwoAdapter;
 import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.LocalData.DataLocalManager;
+import com.example.a900toeic.Model.Answer;
 import com.example.a900toeic.Model.QuestionPartOne;
 import com.example.a900toeic.Model.QuestionPartThreeAndFour;
 import com.example.a900toeic.Model.QuestionPartTwo;
@@ -49,25 +50,102 @@ public class RealTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_real_test);
         addControls();
-        loadQuestions(new iMyCallback() {
-            @Override
-            public void onCallBack(Map<Long, String> map) {
-                Log.d("keymapcallbacksize", map.size()+"");
-                Intent intent = new Intent(RealTestActivity.this, ResultActivity.class);
-                intent.putExtra("keyMap", (Serializable) map);
-                btn_submit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(intent);
-                    }
-                });
-            }
-        });
+        List<Answer> answerList = (List<Answer>) getIntent().getSerializableExtra("listAnswer");
+        if(answerList==null)
+        {
+            loadQuestionForTest(new iMyCallback() {
+                @Override
+                public void onCallBack(Map<Long, String> map) {
+                    Log.d("keymapcallbacksize", map.size()+"");
+                    Intent intent = new Intent(RealTestActivity.this, ResultActivity.class);
+                    intent.putExtra("keyMap", (Serializable) map);
+                    btn_submit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            startActivity(intent);
+                        }
+                    });
+                }
+            });
+        }else {
+            loadQuestionsForResult(answerList);
+
+        }
+
 
     }
 
-    private void loadQuestions(iMyCallback callback) {
-        String testName = getIntent().getStringExtra("testName").trim();
+    private void loadQuestionsForResult(List<Answer> answerList) {
+        String testName = DataLocalManager.getTestName().trim();
+        partOneQuestionList = new ArrayList<>();
+        partTwoQuestionList = new ArrayList<>();
+        partThreeQuestionList = new ArrayList<>();
+        partFourQuestionList = new ArrayList<>();
+        keyMap = new HashMap<>();
+        DBQuery.db.collection("Tests").document(testName).collection("Part1")
+                .orderBy("number").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot doc : queryDocumentSnapshots)
+                {
+                    QuestionPartOne ques = doc.toObject(QuestionPartOne.class);
+                    partOneQuestionList.add(ques);
+                }
+                partOneAdapter = new RealTestPartOneAdapter(RealTestActivity.this,partOneQuestionList,answerList);
+                rcv_test_part1.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
+                rcv_test_part1.setHasFixedSize(true);
+                rcv_test_part1.setAdapter(partOneAdapter);
+            }
+        });
+        DBQuery.db.collection("Tests").document(testName).collection("Part2")
+                .orderBy("number").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot doc : queryDocumentSnapshots)
+                {
+                    QuestionPartTwo ques = doc.toObject(QuestionPartTwo.class);
+                    partTwoQuestionList.add(ques);
+                }
+                partTwoAdapter = new RealTestPartTwoAdapter(RealTestActivity.this,partTwoQuestionList,answerList);
+                rcv_test_part2.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
+                rcv_test_part2.setHasFixedSize(true);
+                rcv_test_part2.setAdapter(partTwoAdapter);
+            }
+        });
+        DBQuery.db.collection("Tests").document(testName).collection("Part3")
+                .orderBy("number1").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot doc : queryDocumentSnapshots)
+                {
+                    QuestionPartThreeAndFour ques = doc.toObject(QuestionPartThreeAndFour.class);
+                    partThreeQuestionList.add(ques);
+                }
+                partThreeAdapter = new RealTestPartThreeAndFourAdapter(RealTestActivity.this,partThreeQuestionList,answerList);
+                rcv_test_part3.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
+                rcv_test_part3.setHasFixedSize(true);
+                rcv_test_part3.setAdapter(partThreeAdapter);
+            }
+        });
+        DBQuery.db.collection("Tests").document(testName).collection("Part4")
+                .orderBy("number1").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(DocumentSnapshot doc : queryDocumentSnapshots)
+                {
+                    QuestionPartThreeAndFour ques = doc.toObject(QuestionPartThreeAndFour.class);
+                    partFourQuestionList.add(ques);
+                }
+                partFourAdapter = new RealTestPartThreeAndFourAdapter(RealTestActivity.this,partFourQuestionList,answerList);
+                rcv_test_part4.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
+                rcv_test_part4.setHasFixedSize(true);
+                rcv_test_part4.setAdapter(partFourAdapter);
+            }
+        });
+    }
+
+    private void loadQuestionForTest(iMyCallback callback) {
+        String testName = DataLocalManager.getTestName().trim();
 
         partOneQuestionList = new ArrayList<>();
         partTwoQuestionList = new ArrayList<>();
@@ -84,7 +162,7 @@ public class RealTestActivity extends AppCompatActivity {
                     keyMap.put(ques.getNumber(), ques.getKey());
                     partOneQuestionList.add(ques);
                 }
-                partOneAdapter = new RealTestPartOneAdapter(RealTestActivity.this,partOneQuestionList);
+                partOneAdapter = new RealTestPartOneAdapter(RealTestActivity.this,partOneQuestionList,null);
                 rcv_test_part1.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
                 rcv_test_part1.setHasFixedSize(true);
                 rcv_test_part1.setAdapter(partOneAdapter);
@@ -100,7 +178,7 @@ public class RealTestActivity extends AppCompatActivity {
                     keyMap.put(ques.getNumber(), ques.getKey());
                     partTwoQuestionList.add(ques);
                 }
-                partTwoAdapter = new RealTestPartTwoAdapter(RealTestActivity.this,partTwoQuestionList);
+                partTwoAdapter = new RealTestPartTwoAdapter(RealTestActivity.this,partTwoQuestionList, null);
                 rcv_test_part2.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
                 rcv_test_part2.setHasFixedSize(true);
                 rcv_test_part2.setAdapter(partTwoAdapter);
@@ -118,7 +196,7 @@ public class RealTestActivity extends AppCompatActivity {
                     keyMap.put(ques.getNumber3(), ques.getKey3());
                     partThreeQuestionList.add(ques);
                 }
-                partThreeAdapter = new RealTestPartThreeAndFourAdapter(RealTestActivity.this,partThreeQuestionList);
+                partThreeAdapter = new RealTestPartThreeAndFourAdapter(RealTestActivity.this,partThreeQuestionList,null);
                 rcv_test_part3.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
                 rcv_test_part3.setHasFixedSize(true);
                 rcv_test_part3.setAdapter(partThreeAdapter);
@@ -136,7 +214,7 @@ public class RealTestActivity extends AppCompatActivity {
                     keyMap.put(ques.getNumber3(), ques.getKey3());
                     partFourQuestionList.add(ques);
                 }
-                partFourAdapter = new RealTestPartThreeAndFourAdapter(RealTestActivity.this,partFourQuestionList);
+                partFourAdapter = new RealTestPartThreeAndFourAdapter(RealTestActivity.this,partFourQuestionList,null);
                 rcv_test_part4.setLayoutManager(new LinearLayoutManager(RealTestActivity.this));
                 rcv_test_part4.setHasFixedSize(true);
                 rcv_test_part4.setAdapter(partFourAdapter);

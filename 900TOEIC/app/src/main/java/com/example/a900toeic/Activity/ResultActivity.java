@@ -1,8 +1,12 @@
 package com.example.a900toeic.Activity;
 
+import static com.example.a900toeic.Database.DBQuery.dataStatisticArr;
+import static com.example.a900toeic.Database.DBQuery.db;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -11,21 +15,31 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.a900toeic.Adapter.ResultAdapter;
+import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.LocalData.DataLocalManager;
 import com.example.a900toeic.Model.Answer;
+import com.example.a900toeic.Model.DataStatistic;
 import com.example.a900toeic.R;
+import com.example.a900toeic.Utils.Utils;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,8 +59,6 @@ public class ResultActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RealTestActivity.class);
         intent.putExtra("listAnswer", (Serializable) answerList);
         startActivity(intent);
-
-
     }
     @Override
     protected void onDestroy() {
@@ -65,6 +77,28 @@ public class ResultActivity extends AppCompatActivity {
         addControls();
         drawChart();
         displayListAnswers();
+        updateStatistic();
+    }
+
+    private void updateStatistic() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        DataStatistic dataStatistic = new DataStatistic((dataStatisticArr.size()+1),
+                Integer.parseInt(tickerView.getText()),
+                DataLocalManager.getTestName(),
+                sdf.format(new Date()));
+        DocumentReference ref =  DBQuery.db.collection("User").document(Utils.getFirebaseUser());
+        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(Integer.parseInt(tickerView.getText())>(int)(long) documentSnapshot.get("max_score"))
+                {
+                    ref.update("max_score",Integer.parseInt(tickerView.getText()));
+                }
+            }
+        });
+        DBQuery.db.collection("User").document(Utils.getFirebaseUser())
+                .collection("Statistic").document().set(dataStatistic);
+
     }
 
     private void displayListAnswers() {

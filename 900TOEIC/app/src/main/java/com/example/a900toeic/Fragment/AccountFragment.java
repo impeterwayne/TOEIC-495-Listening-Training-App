@@ -17,14 +17,17 @@ import com.example.a900toeic.Activity.LoginActivity;
 import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.R;
 import com.example.a900toeic.Utils.Utils;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 
 public class AccountFragment extends Fragment {
     private Button btn_log_out;
     private ImageView img_avatar;
     private TextView txt_fullName;
-    private TextView txt_solved, txt_highestScore, txt_goal;
+    private TextView txt_highestScore, txt_goal;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,10 +53,17 @@ public class AccountFragment extends Fragment {
         btn_log_out = view.findViewById(R.id.btn_log_out);
         img_avatar = view.findViewById(R.id.img_avatar);
         txt_fullName = view.findViewById(R.id.txt_fullName);
-        txt_solved = view.findViewById(R.id.txt_solved);
         txt_highestScore =view.findViewById(R.id.txt_highestScore);
         txt_goal = view.findViewById(R.id.txt_goal);
         txt_fullName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         Glide.with(getContext()).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).into(img_avatar);
+        DocumentReference ref = DBQuery.db.collection("User").document(Utils.getFirebaseUser());
+        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                txt_goal.setText(String.valueOf(documentSnapshot.get("goal")));
+                txt_highestScore.setText(String.valueOf(documentSnapshot.get("max_score")));
+            }
+        });
     }
 }

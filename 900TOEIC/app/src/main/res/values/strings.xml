@@ -27,7 +27,7 @@
     <string name="no_question">There is no question to review</string>
     <string name="real_test">Taking Real Tests</string>
     <string name="submit">SUBMIT</string>
-    <string name="statistic_title">Training Statistic</string>
+    <string name="statistic_title">Progress</string>
     <string name="result">Result</string>
     <string name="logout">Log out</string>
 

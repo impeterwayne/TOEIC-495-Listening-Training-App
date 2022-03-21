@@ -44,26 +44,13 @@
             android:background="@color/white">
 
             <TextView
-                android:id="@+id/solved"
+                android:id="@+id/highest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:text="SOLVED"
-                android:textColor="@color/black"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/highest"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
                 android:layout_marginTop="12dp"
                 android:layout_toStartOf="@+id/goal"
-                android:layout_toEndOf="@+id/solved"
                 android:text="HIGHEST SCORE"
                 android:textAlignment="center"
                 android:textColor="@color/black"
@@ -84,41 +71,14 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/txt_solved"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/solved"
-                android:layout_alignStart="@+id/solved"
-                android:layout_alignEnd="@+id/solved"
-                android:layout_marginTop="12dp"
-                android:text="300"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/txt_highestScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/highest"
                 android:layout_alignEnd="@+id/highest"
-                android:layout_marginTop="12dp"
-                android:layout_toEndOf="@+id/solved"
-                android:text="495"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:layout_alignParentStart="true"
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/highest"
-                android:layout_alignEnd="@+id/highest"
                 android:layout_marginTop="12dp"
-                android:layout_toEndOf="@+id/solved"
                 android:text="495"
                 android:textAlignment="center"
                 android:textColor="@color/black"

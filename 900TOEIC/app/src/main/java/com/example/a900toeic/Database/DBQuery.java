@@ -245,29 +245,18 @@ public class DBQuery {
 
                 for (DocumentSnapshot doc : queryDocumentSnapshots) {
                     DataStatistic dataStatistic = new DataStatistic();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                    try {
-                        Date date = sdf.parse(doc.getId());
-                        dataStatistic.setDate(date);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    dataStatistic.setNum_part1((long) doc.get("num_part1"));
-                    dataStatistic.setNum_part2((long) doc.get("num_part2"));
-                    dataStatistic.setNum_part3((long) doc.get("num_part3"));
-                    dataStatistic.setNum_part4((long) doc.get("num_part4"));
+                    dataStatistic.setDate((String)doc.get("date"));
+                    dataStatistic.setTime((int)(long)doc.get("time"));
+                    dataStatistic.setTestName((String) doc.get("testName"));
+                    dataStatistic.setScore((int) (long)doc.get("score"));
                     res.add(dataStatistic);
                 }
                 Collections.sort(res, new Comparator<DataStatistic>() {
                     @Override
                     public int compare(DataStatistic data1, DataStatistic data2) {
-                        if (data1.getDate().before(data2.getDate())) return -1;
-                        else return 1;
+                        return data1.getTime() - data2.getTime();
                     }
                 });
-                for (int i = 0; i < res.size(); i++) {
-                    Log.d("Statistic", res.get(i).toString());
-                }
                 callback.onCallBack(res);
             }
         });

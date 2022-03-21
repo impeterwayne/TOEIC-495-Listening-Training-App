@@ -1,16 +1,18 @@
 package com.example.a900toeic.Activity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.a900toeic.Adapter.RealTestPartOneAdapter;
 import com.example.a900toeic.Adapter.RealTestPartThreeAndFourAdapter;
 import com.example.a900toeic.Adapter.RealTestPartTwoAdapter;
@@ -21,10 +23,11 @@ import com.example.a900toeic.Model.QuestionPartOne;
 import com.example.a900toeic.Model.QuestionPartThreeAndFour;
 import com.example.a900toeic.Model.QuestionPartTwo;
 import com.example.a900toeic.R;
+import com.example.a900toeic.Utils.Utils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +49,13 @@ public class RealTestActivity extends AppCompatActivity {
     private List<QuestionPartThreeAndFour> partFourQuestionList;
     private Map<Long, String> keyMap;
     private LinearLayout bottom_audio_bar;
+    private MediaPlayer mediaPlayer;
+    private ImageView btn_play;
+    private TextView txt_timeline;
+    private SeekBar seek_bar;
     private TextView btn_submit;
+    private Handler handler;
+    private Runnable runnable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +70,8 @@ public class RealTestActivity extends AppCompatActivity {
                     Log.d("keymapcallbacksize", map.size()+"");
                     Intent intent = new Intent(RealTestActivity.this, ResultActivity.class);
                     intent.putExtra("keyMap", (Serializable) map);
+                    playAudio();
+                    addEvents();
                     btn_submit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -74,14 +85,103 @@ public class RealTestActivity extends AppCompatActivity {
             bottom_audio_bar.setVisibility(View.GONE);
         }
 
-
     }
+
+    private void addEvents() {
+        btn_play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mediaPlayer.isPlaying()) {
+                    btn_play.setImageResource(R.drawable.ic_play_white);
+                    mediaPlayer.pause();
+                } else {
+                    btn_play.setImageResource(R.drawable.ic_pause);
+                    mediaPlayer.start();
+                }
+            }
+        });
+        seek_bar.setClickable(false);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(mediaPlayer!=null)
+        {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
 
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(RealTestActivity.this, ResultActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+    }
+    private void playAudio()
+    {
+        if(mediaPlayer==null)
+        {
+            mediaPlayer = new MediaPlayer();
+            DBQuery.db.collection("Tests").document(DataLocalManager.getTestName()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    btn_play.setImageResource(R.drawable.ic_pause);
+                    if (mediaPlayer != null) {
+                        mediaPlayer.stop();
+                        mediaPlayer.release();
+                        mediaPlayer = null;
+                    }
+                    mediaPlayer = new MediaPlayer();
+                    try {
+                        mediaPlayer.setDataSource((String)documentSnapshot.get("audio_url"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mediaPlayer) {
+                            seek_bar.setMax(mediaPlayer.getDuration());
+                            txt_timeline.setText(Utils.getTimeString(mediaPlayer.getDuration()));
+                            mediaPlayer.start();
+                            updateSeekBar();
+                        }
+                    });
+                    mediaPlayer.prepareAsync();
+                }
+            });
+        }
+
+    }
+
+    private void updateSeekBar() {
+        try {
+            int currPos = mediaPlayer.getCurrentPosition();
+            seek_bar.setProgress(currPos);
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if(mediaPlayer.isPlaying())
+                        {
+                            btn_play.setImageResource(R.drawable.ic_pause);
+                        }else {
+                            btn_play.setImageResource(R.drawable.ic_play_white);
+                        }
+                    }catch (Exception ex)
+                    {
+
+                    }
+                    updateSeekBar();
+                }
+            };
+            handler.postDelayed(runnable, 500);
+        } catch (Exception e) {
+
+        }
     }
 
     private void loadQuestionsForResult(List<Answer> answerList) {
@@ -239,7 +339,11 @@ public class RealTestActivity extends AppCompatActivity {
         rcv_test_part3 = findViewById(R.id.rcv_test_part3);
         rcv_test_part4 = findViewById(R.id.rcv_test_part4);
         bottom_audio_bar = findViewById(R.id.bottom_audio_bar);
+        btn_play = findViewById(R.id.btn_play);
+        txt_timeline = findViewById(R.id.txt_timeline);
+        seek_bar = findViewById(R.id.seek_bar);
         btn_submit = findViewById(R.id.btn_submit);
+        handler = new Handler();
     }
     public interface iMyCallback
     {

@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EFEFEF"
-    android:gravity="center"
     android:orientation="vertical"
     tools:context=".Fragment.StatisticFragment">
 
@@ -37,7 +36,7 @@
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/mChart"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="300dp"
         android:layout_marginVertical="12dp"
-        android:layout_weight="1" />
+        />
 </LinearLayout>

@@ -86,7 +86,7 @@ public class RealTestAdapter extends RecyclerView.Adapter<RealTestAdapter.ViewHo
                 public void onClick(View view) {
                     dialog.dismiss();
                     Intent intent = new Intent(context, RealTestActivity.class);
-                    DataLocalManager.addTestName(txt_testName.getText().toString());
+                    DataLocalManager.addTestName(txt_testName.getText().toString().trim());
                     context.startActivity(intent);
                 }
             });

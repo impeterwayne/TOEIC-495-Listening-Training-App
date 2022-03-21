@@ -29,6 +29,7 @@
     <string name="submit">SUBMIT</string>
     <string name="statistic_title">Training Statistic</string>
     <string name="result">Result</string>
+    <string name="logout">Log out</string>
 
 
 </resources>

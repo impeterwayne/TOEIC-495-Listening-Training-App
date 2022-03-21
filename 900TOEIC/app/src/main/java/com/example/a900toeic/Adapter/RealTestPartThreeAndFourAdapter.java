@@ -70,6 +70,7 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<Recycl
             resultViewHolder.txt_question2.setText(question.getQuestion2());
             resultViewHolder.txt_question_number3.setText("Question No. " + question.getNumber3());
             resultViewHolder.txt_question3.setText(question.getQuestion3());
+            resultViewHolder.rb_part34_key1A.setText(question.getScript_key1A());
             resultViewHolder.rb_part34_key1B.setText(question.getScript_key1B());
             resultViewHolder.rb_part34_key1C.setText(question.getScript_key1C());
             resultViewHolder.rb_part34_key1D.setText(question.getScript_key1D());
@@ -218,6 +219,18 @@ public class RealTestPartThreeAndFourAdapter extends RecyclerView.Adapter<Recycl
                     resultViewHolder.rb_part34_key3D.setTextColor(Color.GREEN);
                     break;
             }
+            resultViewHolder.rb_part34_key1A.setClickable(false);
+            resultViewHolder.rb_part34_key1B.setClickable(false);
+            resultViewHolder.rb_part34_key1C.setClickable(false);
+            resultViewHolder.rb_part34_key1D.setClickable(false);
+            resultViewHolder.rb_part34_key2A.setClickable(false);
+            resultViewHolder.rb_part34_key2B.setClickable(false);
+            resultViewHolder.rb_part34_key2C.setClickable(false);
+            resultViewHolder.rb_part34_key2D.setClickable(false);
+            resultViewHolder.rb_part34_key3A.setClickable(false);
+            resultViewHolder.rb_part34_key3B.setClickable(false);
+            resultViewHolder.rb_part34_key3C.setClickable(false);
+            resultViewHolder.rb_part34_key3D.setClickable(false);
             resultViewHolder.btn_forward.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

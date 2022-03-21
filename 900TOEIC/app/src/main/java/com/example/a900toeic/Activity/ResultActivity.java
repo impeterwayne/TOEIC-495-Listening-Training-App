@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.a900toeic.Adapter.ResultAdapter;
@@ -27,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ResultActivity extends AppCompatActivity {
+    private Toolbar toolbar;
+    private ImageView btn_home;
     private PieChart resultChart;
     private TickerView tickerView;
     private List<Answer> answerList;
@@ -40,6 +45,7 @@ public class ResultActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RealTestActivity.class);
         intent.putExtra("listAnswer", (Serializable) answerList);
         startActivity(intent);
+
 
     }
     @Override
@@ -93,9 +99,27 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private void addControls() {
+        btn_home = findViewById(R.id.btn_home);
         resultChart = findViewById(R.id.chart_result);
         tickerView = findViewById(R.id.ticker);
         rcv_result = findViewById(R.id.rcv_result);
+        toolbar = findViewById(R.id.toolbar);
+        btn_home.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ResultActivity.this, MainActivity.class));
+                finish();
+            }
+        });
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ResultActivity.this, RealTestActivity.class);
+                intent.putExtra("listAnswer", (Serializable) answerList);
+                startActivity(intent);
+            }
+        });
     }
 
     private List<PieEntry> loadDataValues() {

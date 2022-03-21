@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +45,7 @@ public class RealTestActivity extends AppCompatActivity {
     private List<QuestionPartThreeAndFour> partThreeQuestionList;
     private List<QuestionPartThreeAndFour> partFourQuestionList;
     private Map<Long, String> keyMap;
+    private LinearLayout bottom_audio_bar;
     private TextView btn_submit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,19 +71,25 @@ public class RealTestActivity extends AppCompatActivity {
             });
         }else {
             loadQuestionsForResult(answerList);
-
+            bottom_audio_bar.setVisibility(View.GONE);
         }
 
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(RealTestActivity.this, ResultActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+    }
+
     private void loadQuestionsForResult(List<Answer> answerList) {
-        String testName = DataLocalManager.getTestName().trim();
+        String testName = DataLocalManager.getTestName();
         partOneQuestionList = new ArrayList<>();
         partTwoQuestionList = new ArrayList<>();
         partThreeQuestionList = new ArrayList<>();
         partFourQuestionList = new ArrayList<>();
-        keyMap = new HashMap<>();
         DBQuery.db.collection("Tests").document(testName).collection("Part1")
                 .orderBy("number").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -145,8 +153,7 @@ public class RealTestActivity extends AppCompatActivity {
     }
 
     private void loadQuestionForTest(iMyCallback callback) {
-        String testName = DataLocalManager.getTestName().trim();
-
+        String testName = DataLocalManager.getTestName();
         partOneQuestionList = new ArrayList<>();
         partTwoQuestionList = new ArrayList<>();
         partThreeQuestionList = new ArrayList<>();
@@ -231,6 +238,7 @@ public class RealTestActivity extends AppCompatActivity {
         rcv_test_part2 = findViewById(R.id.rcv_test_part2);
         rcv_test_part3 = findViewById(R.id.rcv_test_part3);
         rcv_test_part4 = findViewById(R.id.rcv_test_part4);
+        bottom_audio_bar = findViewById(R.id.bottom_audio_bar);
         btn_submit = findViewById(R.id.btn_submit);
     }
     public interface iMyCallback

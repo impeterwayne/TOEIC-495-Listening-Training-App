@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.a900toeic.Database.DBQuery;
 import com.example.a900toeic.R;
 import com.google.firebase.auth.FirebaseAuth;
 

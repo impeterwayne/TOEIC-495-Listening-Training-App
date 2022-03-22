@@ -58,9 +58,9 @@ public class PartTwoFragment extends Fragment {
         btn_keyA = view.findViewById(R.id.btn_key1A);
         btn_keyA.setTag("A");
         btn_keyB = view.findViewById(R.id.btn_key1B);
-        btn_keyA.setTag("B");
+        btn_keyB.setTag("B");
         btn_keyC = view.findViewById(R.id.btn_key1C);
-        btn_keyA.setTag("C");
+        btn_keyC.setTag("C");
         txt_script_part_two = view.findViewById(R.id.txt_script_part_two);
         txt_script_keyA = view.findViewById(R.id.txt_script_keyA);
         txt_script_keyB = view.findViewById(R.id.txt_script_keyB);

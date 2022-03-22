@@ -327,6 +327,7 @@ public class TrainingActivity extends AppCompatActivity {
 
                 }
             });
+            bottomAudioBar.setVisibility(View.VISIBLE);
         }else {
             bottomAudioBar.setVisibility(View.GONE);
         }
@@ -344,7 +345,8 @@ public class TrainingActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
                                 if (task.getResult().size() > 0) {
-
+                                    btn_bookmark.setImageResource(R.drawable.ic_bookmarked_white);
+                                    btn_bookmark.setTag("bookmarked");
                                 } else {
                                     btn_bookmark.setImageResource(R.drawable.ic_bookmark_white);
                                     btn_bookmark.setTag("bookmark");
